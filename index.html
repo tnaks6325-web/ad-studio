@@ -65,6 +65,12 @@
   ul.chk li{padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
   ul.chk li:before{content:'\2610';margin-right:10px;color:var(--mint)}
   .pill{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:11.5px;color:var(--sub);margin-left:6px}
+  #t_preview{position:fixed;top:120px;right:20px;width:240px;background:var(--card);border:1px solid var(--mint);border-radius:12px;padding:10px;z-index:15;display:none;box-shadow:0 8px 30px rgba(0,0,0,.45)}
+  #t_preview.on{display:block}
+  #t_preview img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block;background:var(--card2)}
+  #t_preview .pvlabel{font-size:12.5px;color:var(--mint);margin-top:8px;text-align:center;font-weight:700}
+  #t_preview .pvhint{font-size:11px;color:var(--sub);text-align:center;margin-top:2px}
+  @media(max-width:900px){#t_preview{position:static;width:100%;margin-bottom:14px;top:auto;right:auto}}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--mint);color:#0a1512;padding:10px 18px;border-radius:999px;font-weight:700;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
   .toast.show{opacity:1}
 </style>
@@ -118,6 +124,7 @@
     <h2>프롬프트 번역기 <span class="pill">막연한 한 줄 → 정밀 프롬프트</span></h2>
     <p class="sub">막연한 요청 + 카테고리 옵션을 고르면 상세 영문 묘사로 확장됩니다. 없는 옵션은 "+추가"로 만들면 영구 저장.</p>
     <div class="card"><label>막연한 요청 <span class="hint">예: "인물을 한국인 여자 인플루언서처럼 바꿔줘"</span></label><textarea id="t_intent" placeholder="편하게 한 줄"></textarea></div>
+    <div id="t_preview"><img id="t_pvimg" alt="선택한 옵션 미리보기"><div class="pvlabel" id="t_pvlabel"></div><div class="pvhint">선택한 배경의 예시 분위기</div></div>
     <div class="card" id="t_cats"></div>
     <div class="card"><div class="out-head"><span class="lbl" style="margin:0">완성 프롬프트</span>
       <div><button class="btn ghost" onclick="tClear()">선택 초기화</button> <button class="btn ghost" onclick="libAddFrom('번역기',document.getElementById('t_out').textContent)">라이브러리 저장</button> <button class="btn" onclick="cp('t_out')">복사</button></div></div>
@@ -440,6 +447,39 @@ var TMORE={
  ]
 };
 Object.keys(TMORE).forEach(function(k){if(TDEF[k])TDEF[k].opts=TDEF[k].opts.concat(TMORE[k]);});
+var PVB="https://d8j0ntlcm91z4.cloudfront.net/user_3FZXLeq7PhSR6ydqZofct8uuWjg/";
+var PREVIEW={person:{},style:{},bg:{
+ '아늑한 집 거실':PVB+'hf_20260702_104934_3da4c288-1306-4c3b-96ea-575e1cd15f5e_min.webp',
+ '모던 사무실':PVB+'hf_20260702_104940_355eeee6-e4d3-4554-bcab-f7bdf29a02f7_min.webp',
+ '야외 공원':PVB+'hf_20260702_104942_5d2cab70-c8d9-4f9b-9090-27f8883d40ba_min.webp',
+ '트렌디 카페':PVB+'hf_20260702_104945_36e0c39b-bb9e-40e4-831a-d1c922a4ba1b_min.webp',
+ '밝은 스튜디오':PVB+'hf_20260702_104956_90bc6372-70f6-4ccc-b8c0-a3ed6fe9398b_min.webp',
+ '욕실 세면대':PVB+'hf_20260702_105000_15092832-d88f-40bf-8199-790d1e0b964b_min.webp',
+ '미니멀 화장대':PVB+'hf_20260702_105002_e932d697-16fd-4d37-a74a-c746280ba286_min.webp',
+ '주방 아일랜드':PVB+'hf_20260702_105003_91c13eac-e90b-4c52-ae5c-9aacab1e2ae9_min.webp',
+ '호텔 스위트룸':PVB+'hf_20260702_105018_018ca02b-9a3a-490d-8e5c-25253a2df3ed_min.webp',
+ '도심 야경 거리':PVB+'hf_20260702_105022_6adf322f-0d63-4163-95f0-7eceaa5f7ae8_min.webp',
+ '해변(일몰)':PVB+'hf_20260702_105025_63ffb3bc-594b-4bd8-8611-51511d2703cf_min.webp',
+ '아늑한 침실':PVB+'hf_20260702_105027_81a1f198-c9fe-4e94-81cd-fd4d560b7c5b_min.webp',
+ '편집숍/부티크':PVB+'hf_20260702_105037_fdeba8f2-d7b4-478d-b787-28ab96ae8a55_min.webp',
+ '야외 테라스':PVB+'hf_20260702_105039_3fd29d5b-b722-4aca-98c9-868f094885d1_min.webp',
+ '지하철/버스 안':PVB+'hf_20260702_105041_6aa59162-7545-46e9-b9ec-63e3fc2cd5e1_min.webp',
+ '헬스장':PVB+'hf_20260702_105043_93b5c871-ac5d-4686-b023-f54e12867439_min.webp',
+ '도서관/서재':PVB+'hf_20260702_105054_49df27c6-0656-41d1-9458-9ea40b211dc1_min.webp',
+ '벚꽃 배경(봄)':PVB+'hf_20260702_105056_2edf5d61-689b-4e97-96e9-9aba7ff02049_min.webp',
+ '눈 오는 겨울 거리':PVB+'hf_20260702_105102_91375ee6-70b3-4bfb-b047-30ebae6b7f91_min.webp',
+ '럭셔리 백화점 매장':PVB+'hf_20260702_105104_c1446741-bb49-47e2-9ce9-652d5c3d120d_min.webp'
+}};
+function setPreview(k,label){
+  var box=document.getElementById('t_preview');if(!box)return;
+  var map=PREVIEW[k];
+  if(tSel[k]===label&&map&&map[label]){
+    document.getElementById('t_pvimg').src=map[label];
+    document.getElementById('t_pvlabel').textContent=TDEF[k].title+' · '+label;
+    box.classList.add('on');
+  }else if(tSel[k]!==label){box.classList.remove('on');}
+}
+function initPreview(){var order=['bg','person','style'];for(var i=0;i<order.length;i++){var k=order[i];if(tSel[k]&&PREVIEW[k]&&PREVIEW[k][tSel[k]]){setPreview(k,tSel[k]);return;}}}
 var tSel=ls_load('site_tsel',{}),tCustom=ls_load('site_tcustom',{});
 function tOpts(k){return TDEF[k].opts.concat(tCustom[k]||[]);}
 function tDesc(k,l){var o=tOpts(k).find(function(o){return o.label===l;});return o?o.desc:l;}
@@ -449,7 +489,7 @@ function tRender(){
     var box=document.createElement('div');box.className='cat';box.innerHTML='<h4>'+TDEF[k].title+'</h4>';
     var chips=document.createElement('div');chips.className='chips';
     tOpts(k).forEach(function(o){var c=document.createElement('span');c.className='chip'+(tSel[k]===o.label?' on':'');c.textContent=o.label;
-      c.onclick=function(){tSel[k]=(tSel[k]===o.label?undefined:o.label);ls_save('site_tsel',tSel);tRender();tBuild();};
+      c.onclick=function(){tSel[k]=(tSel[k]===o.label?undefined:o.label);ls_save('site_tsel',tSel);setPreview(k,o.label);tRender();tBuild();};
       if((tCustom[k]||[]).some(function(x){return x.label===o.label;})){var x=document.createElement('span');x.className='x';x.textContent='✕';
         x.onclick=function(e){e.stopPropagation();tCustom[k]=tCustom[k].filter(function(v){return v.label!==o.label;});if(tSel[k]===o.label)tSel[k]=undefined;ls_save('site_tcustom',tCustom);ls_save('site_tsel',tSel);tRender();tBuild();};c.appendChild(x);}
       chips.appendChild(c);});
@@ -472,7 +512,7 @@ function tBuild(){
 function tClear(){tSel={};ls_save('site_tsel',tSel);tRender();tBuild();}
 document.getElementById('t_intent').value=ls_load('site_tintent','')||'';
 document.getElementById('t_intent').addEventListener('input',tBuild);
-tRender();tBuild();
+tRender();tBuild();initPreview();
 
 var BANNED=[['미백','톤 케어'],['주름개선','탄력 케어'],['주름 개선','탄력 케어'],['치료','케어'],['재생','진정 케어'],['효능','사용감'],['안티에이징','에이징 케어'],['노화 방지','에이징 케어'],['항균','산뜻한'],['살균','깨끗한'],['아토피',''],['발모','']];
 ['c_prod','c_ben','c_tgt','c_len','c_tone','c_cta'].forEach(function(id){document.getElementById(id).addEventListener('input',cBuild);});
