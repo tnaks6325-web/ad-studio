@@ -14,6 +14,7 @@
 | GitHub 저장소 | https://github.com/tnaks6325-web/ad-studio |
 | 라이브 사이트 | https://tnaks6325-web.github.io/ad-studio/ |
 | 배포 파일 | 저장소의 `index.html` (단일 파일, vanilla JS, ~709줄) |
+| 스킬 원본(SoT) | 저장소의 `skill/ad-video-helper/` (SKILL.md + references/ 4개 + assets/ 1개) |
 | 생성 이미지 | 힉스필드 CDN. base URL(PVB) = `https://d8j0ntlcm91z4.cloudfront.net/user_3FZXLeq7PhSR6ydqZofct8uuWjg/` |
 
 ## 3. 힉스필드 MCP
@@ -65,23 +66,26 @@
 - 검증은 브라우저에서 `fetch(url+'?cb='+Date.now(),{cache:'no-store'})`로 origin을 직접 읽어라. `web_fetch`나 그냥 새로고침은 CDN 캐시 때문에 옛 내용을 보여줘 오판하기 쉬움.
 - GitHub 파일명 필드가 타이핑을 안 먹으면 triple_click으로 전체선택 후 입력.
 
-### 샌드박스 파일 desync 주의
-- bash 마운트와 파일툴(Read/Write/Edit) 뷰가 어긋날 수 있음(과거에 bash에서 7바이트 stale 파일을 봄). **파일 내용 작업은 Read/Write/Edit 파일툴만 신뢰**하고, bash로 cp/편집하지 말 것. GitHub 업로드용 파일도 파일툴로 Write한 것을 쓸 것.
+### 세션 샌드박스 장애 주의 (실제로 겪음)
+- bash 마운트와 파일툴(Read/Write/Edit) 뷰가 어긋날 수 있음(과거에 bash에서 7바이트 stale 파일을 봄). **파일 내용 작업은 Read/Write/Edit 파일툴만 신뢰**하고, bash로 cp/편집하지 말 것.
+- **샌드박스 VM 자체가 부팅 실패**할 수도 있음(bash 전멸 "VM service not running" + 존재하지 않는 하위폴더 Write 거부 + 컴퓨터제어 승인창 무응답이 동시에 옴). 세션 내 복구 안 되면 **앱 재시작 후 새 세션**이 정답. 시간이 지나 VM이 늦게 살아나는 경우도 있으니 새 메시지 시점에 한 번 재확인.
+- outputs 마운트에서 `zip` CLI가 마지막 rename 단계에서 "Operation not permitted"로 실패할 수 있음 → **python zipfile로 우회**. outputs 파일 삭제는 `allow_cowork_file_delete` 승인 후 가능.
 
 ## 7. Claude 스킬 (ad-video-helper)
 
-- `.skill` 파일과 SKILL.md/references가 이전 세션 outputs에 생성됨. 모드 A(제품→광고영상), 모드 B(레퍼런스 영상→재현 프롬프트) 2개.
-- **주의: 아직 "설치된 스킬"이 아님.** outputs의 파일일 뿐이라 새 세션에서 자동으로 안 뜬다.
-- 새 세션/미래에 쓰려면 **설정 → Capabilities에서 설치**해야 함. (이 세션에서는 스킬 파일 생성/수정 불가 — 읽기 전용 캐시)
+- **설치 완료 (2026-07-03).** 저장소 `skill/ad-video-helper/`(SoT)를 받아 `.skill`로 패키징 → present_files "Save skill" 버튼으로 설치됨. 설치 후 세션 스킬 목록에 `ad-video-helper`로 뜨는 것 확인함.
+- 모드 A(제품→광고영상), 모드 B(레퍼런스 영상→재현 프롬프트) 2개.
+- **재패키징 절차(검증됨)**: raw.githubusercontent에서 6개 파일 다운로드 → git blob SHA-1로 무결성 검증(`(printf 'blob %d\0' size; cat file) | sha1sum`) → SKILL.md가 **아카이브 루트**에 오도록 zip → `.skill` 확장자로 present_files 전달. 스킬 파일 수정은 저장소에서 하고, 수정 시 재패키징+재설치 필요.
 - 핵심 규칙: 매 단계 추천+승인, 크레딧 드는 생성 전 비용 게이트, 조용한 재시도 금지, 기본 15초(최대 30초 체이닝), 프리미엄 모델 기본(Seedance 2.0 / 시네마틱은 Cinema Studio 3.0·Veo 3.1).
+- **미검증**: 새 대화에서 자연 트리거("광고 만들어줘")로 S0→S6 실동작 테스트는 아직 안 함. 테스트 시 비용 게이트 확인까지만 하고 생성 전에 멈추는 것 권장.
 
 ## 8. 완료 / 미완
 
-**완료**: 웹사이트 제작·배포, 번역기 20종×5카테고리 옵션 확장, 미리보기 이미지 시스템, 조명 20종(고정 인물), 스타일 20종(하이브리드), 스킬 문서/패키지, 카피·씬플래너·라이브러리 기능.
+**완료**: 웹사이트 제작·배포, 번역기 20종×5카테고리 옵션 확장, 미리보기 이미지 시스템, 조명 20종(고정 인물), 스타일 20종(하이브리드), 스킬 문서/패키지, 카피·씬플래너·라이브러리 기능, **스킬 .skill 패키징·설치(2026-07-03)**.
 
 **미완/후보 작업**:
-- 스킬 실제 설치(설정 → Capabilities).
-- 원한다면 person·bg 미리보기도 조명/스타일처럼 "고정 기준" 재정비 가능(현재는 카테고리 특성상 각기 다른 피사체라 문제 없음).
+- 스킬 실동작 테스트: 새 대화에서 자연 트리거 → S0 잔액 확인 → 비용 게이트까지 흐름 검증(생성 전 중단).
+- 원한다면 person·bg 미리보기도 조명/스타일처럼 "고정 기준" 재정비 가능(현재는 카테고리 특성상 각기 다른 피사체라 문제 없음 — 실사용 불만 나올 때만).
 - 오디오는 의도적으로 패스 상태.
 
 ## 9. 사용자 선호 (작업 스타일)
