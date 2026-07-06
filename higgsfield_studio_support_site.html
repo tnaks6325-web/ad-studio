@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>클로드 × 힉스필드 · 영상소재 제작 지원 센터</title>
+<style>
+  :root{--bg:#0d1012;--card:#16191d;--card2:#1e2328;--line:#2a3036;--txt:#eef2f4;
+    --sub:#9aa6ad;--lime:#d7f205;--mint:#5fe3c0;--pink:#ff3d7f;--warn:#f0a13d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.65}
+  a{color:var(--mint)}
+  .top{position:sticky;top:0;z-index:10;background:rgba(13,16,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .top .inner{max-width:1000px;margin:0 auto;padding:14px 20px}
+  .brand{font-size:18px;font-weight:800}
+  .brand small{color:var(--sub);font-weight:500;font-size:12px;margin-left:8px}
+  nav{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  nav button{background:var(--card2);border:1px solid var(--line);color:var(--sub);border-radius:999px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit}
+  nav button:hover{color:var(--txt);border-color:var(--mint)}
+  nav button.on{background:var(--lime);color:#11150a;border-color:var(--lime);font-weight:700}
+  main{max-width:1000px;margin:0 auto;padding:26px 20px 80px}
+  section{display:none}
+  section.on{display:block;animation:f .2s ease}
+  @keyframes f{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  h2{font-size:22px;margin:0 0 6px}
+  .sub{color:var(--sub);font-size:14px;margin:0 0 20px}
+  h3{font-size:14px;color:var(--mint);margin:22px 0 10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:720px){.grid{grid-template-columns:1fr}}
+  .field label,.lbl{display:block;font-size:13px;font-weight:600;margin-bottom:7px}
+  .hint{color:var(--sub);font-weight:400;font-size:11.5px}
+  input[type=text],select,textarea{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit}
+  textarea{resize:vertical;min-height:54px}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--mint)}
+  .full{grid-column:1/-1}
+  .radio{display:flex;gap:8px;flex-wrap:wrap}
+  .radio label{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-weight:400;cursor:pointer;margin:0;font-size:13px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+  .chip{background:var(--card2);border:1px solid var(--line);color:var(--sub);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer}
+  .chip:hover{border-color:var(--mint);color:var(--txt)}
+  .chip.on{background:var(--lime);color:#11150a;border-color:var(--lime);font-weight:700}
+  .chip .x{margin-left:6px;opacity:.55}
+  .add{display:flex;gap:6px;margin-top:8px}
+  .add input{flex:1;font-size:12.5px;padding:7px 10px}
+  .addbtn{background:transparent;border:1px dashed var(--line);color:var(--sub);border-radius:8px;padding:7px 12px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+  .addbtn:hover{border-color:var(--mint);color:var(--txt)}
+  .cat{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;display:flex;gap:14px;align-items:stretch}
+  .catmain{flex:1;min-width:0}
+  .catpv{flex:0 0 150px;display:flex;flex-direction:column}
+  .catpv img{width:100%;flex:1;min-height:110px;object-fit:cover;border-radius:8px;border:1px solid var(--mint);background:var(--card2)}
+  .catpv .cap{font-size:11px;color:var(--mint);text-align:center;margin-top:4px;font-weight:700}
+  .pvempty{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;color:var(--sub);border:1px dashed var(--line);border-radius:8px;background:var(--card2);padding:6px;min-height:110px}
+  .audbtn{width:100%;flex:1;min-height:110px;border:1px solid var(--mint);border-radius:8px;background:var(--card2);color:var(--mint);font-weight:700;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;font-family:inherit}
+  .audbtn:hover{background:var(--mint);color:#0a1512}
+  @media(max-width:720px){.cat{flex-direction:column}.catpv{flex-basis:auto}.catpv img,.pvempty{height:150px;min-height:0;flex:none}}
+  .cat:first-child{border-top:none;padding-top:0;margin-top:0}
+  .cat h4{font-size:13px;margin:0 0 8px;color:var(--mint)}
+  .out-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+  .btn{background:var(--lime);color:#11150a;border:none;border-radius:8px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+  .btn.ghost{background:transparent;color:var(--sub);border:1px solid var(--line)}
+  pre{margin:0;padding:14px;white-space:pre-wrap;word-break:break-word;font-size:12.5px;font-family:ui-monospace,Menlo,monospace;color:#dfe6ea;background:var(--card2);border-radius:8px;max-height:360px;overflow:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--mint);font-weight:600}
+  .step{display:flex;gap:12px;margin-bottom:12px}
+  .step .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--lime);color:#11150a;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .step .b{font-size:13.5px}.step .b b{display:block;margin-bottom:2px}
+  .warn{background:#241a12;border:1px solid #5a3d1f;border-radius:12px;padding:14px 16px;font-size:13px;margin-top:6px}
+  .warn b{color:var(--lime)}
+  ul.chk{list-style:none;padding:0;margin:0}
+  ul.chk li{padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  ul.chk li:before{content:'\2610';margin-right:10px;color:var(--mint)}
+  .pill{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:11.5px;color:var(--sub);margin-left:6px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--mint);color:#0a1512;padding:10px 18px;border-radius:999px;font-weight:700;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="top"><div class="inner">
+  <div class="brand">🎬 영상소재 제작 지원 센터 <small>클로드 × 힉스필드 · 초보자용</small></div>
+  <nav id="nav"></nav>
+</div></div>
+<main>
+  <section id="s-start" class="on">
+    <h2>시작하기</h2>
+    <p class="sub">비개발자·비영상인도 이 페이지 하나로 고퀄 광고 영상 소재를 만들 수 있게 돕는 보조 도구입니다.</p>
+    <div class="card">
+      <h3 style="margin-top:0">준비: 힉스필드 MCP 연결 (1번만)</h3>
+      <div class="step"><div class="n">1</div><div class="b"><b>클로드 → 설정 → 커넥터 → 사용자 지정 커넥터 추가</b></div></div>
+      <div class="step"><div class="n">2</div><div class="b"><b>URL 입력</b> <code style="color:var(--lime)">https://mcp.higgsfield.ai/mcp</code> <span class="hint">(끝에 /mcp 빠지면 연결 실패)</span></div></div>
+      <div class="step"><div class="n">3</div><div class="b"><b>연결 → 힉스필드 로그인(OAuth)</b> 후 권한 "항상 허용".</div></div>
+      <div class="warn"><b>돈 관련 핵심:</b> 영상 생성은 <b>유료 플랜 필수</b>(무료는 이미지만). 생성 전 항상 크레딧을 확인하세요. Veo·Sora 같은 프리미엄은 크레딧이 빨리 닳습니다.</div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">전체 흐름 5단계</h3>
+      <div class="step"><div class="n">①</div><div class="b"><b>컨셉</b> 제품·레퍼런스 분석 → 톤·컬러·메시지·타깃</div></div>
+      <div class="step"><div class="n">②</div><div class="b"><b>베이스 이미지</b> 제품 사진 레퍼런스로 광고컷 생성</div></div>
+      <div class="step"><div class="n">③</div><div class="b"><b>프롬프트</b> <a href="#" onclick="go('builder');return false">빌더</a>·<a href="#" onclick="go('translator');return false">번역기</a>로 정밀 프롬프트</div></div>
+      <div class="step"><div class="n">④</div><div class="b"><b>영상 생성</b> 시작프레임 물려 끊김 없이 (15초↑ 체이닝)</div></div>
+      <div class="step"><div class="n">⑤</div><div class="b"><b>발행</b> 자막·카피 얹어 릴스/숏폼</div></div>
+    </div>
+  </section>
+
+  <section id="s-builder">
+    <h2>프롬프트 빌더 <span class="pill">광고영상 마스터 프롬프트</span></h2>
+    <p class="sub">칸을 채우면 클로드에 붙여넣을 마스터 프롬프트가 자동 완성됩니다.</p>
+    <div class="card"><div class="grid">
+      <div class="field full"><label>제품 페이지/사진 <span class="hint">판매 링크</span></label><input type="text" id="b_product" placeholder="https://..."></div>
+      <div class="field full"><label>분위기</label><input type="text" id="b_mood" placeholder="예: 청량하고 수분감 있는"><div class="chips" id="b_moodchips"></div></div>
+      <div class="field"><label>영상 길이 <span class="hint">15초↑ 체이닝</span></label><select id="b_length"><option>5초</option><option>8초</option><option selected>15초</option><option>20초</option><option>30초</option></select></div>
+      <div class="field"><label>화면 비율</label><select id="b_ratio"><option selected>9:16 (릴스/숏폼)</option><option>4:5 (피드)</option><option>1:1 (정사각)</option><option>16:9 (가로)</option></select></div>
+      <div class="field"><label>광고 포맷</label><select id="b_format"><option value="UGC" selected>UGC — 후기 느낌(전환율★)</option><option value="Product Review">Product Review</option><option value="Unboxing">Unboxing</option><option value="Hyper Motion">Hyper Motion — 제형 훅</option><option value="TV Spot">TV Spot</option></select></div>
+      <div class="field"><label>영상 모델 <span class="hint">고퀄 기준</span></label><select id="b_vmodel"><option value="Seedance 2.0" selected>Seedance 2.0 — 제품 일관성(추천)</option><option value="Cinema Studio 3.0">Cinema Studio 3.0 — 시네마급</option><option value="Veo 3.1">Veo 3.1 — 초사실(최대8초)</option></select></div>
+      <div class="field"><label>이미지 모델</label><select id="b_imodel"><option value="GPT Image 2" selected>GPT Image 2 — 라벨 정확</option><option value="Nano Banana Pro">Nano Banana Pro — 최고 품질</option><option value="Seedream 5.0 Lite">Seedream 5.0 Lite</option></select></div>
+      <div class="field"><label>사진 사용</label><div class="radio"><label><input type="radio" name="b_photo" value="upload" checked> 업로드(정확)</label><label><input type="radio" name="b_photo" value="ai"> AI 생성</label></div></div>
+      <div class="field"><label>마무리</label><input type="text" id="b_ending" value="로고로 끝내기"></div>
+    </div></div>
+    <div class="card"><div class="out-head"><span class="lbl" style="margin:0">완성 프롬프트</span>
+      <div><button class="btn ghost" onclick="bReset()">초기화</button> <button class="btn ghost" onclick="libAddFrom('빌더',document.getElementById('b_out').textContent)">라이브러리 저장</button> <button class="btn" onclick="cp('b_out')">복사</button></div></div>
+      <pre id="b_out"></pre></div>
+  </section>
+
+  <section id="s-translator">
+    <h2>프롬프트 번역기 <span class="pill">막연한 한 줄 → 정밀 프롬프트</span></h2>
+    <p class="sub">① 제작 모델을 먼저 고르면 그 모델의 특징·프롬프트 공식이 뜨고, ② 카테고리와 요청 한 줄을 채우면 그 모델 형식에 맞는 프롬프트가 자동으로 만들어집니다.</p>
+    <div class="card" id="t_modelbox">
+      <label>① 제작 모델 선택 <span class="hint">모델마다 잘 먹는 프롬프트 구조가 다릅니다</span></label>
+      <div class="chips" id="t_modelchips"></div>
+      <div id="t_modelinfo"></div>
+    </div>
+    <div class="card"><label>② 막연한 요청 <span class="hint">무엇을 하는 장면인지 한 줄 (예: "물방울 맺힌 크림을 바르는 클로즈업")</span></label><textarea id="t_intent" placeholder="편하게 한 줄 — 이게 각 모델 프롬프트의 Action 자리에 들어갑니다"></textarea></div>
+    <div class="card" id="t_cats"></div>
+    <div class="card"><div class="out-head"><span class="lbl" style="margin:0">완성 프롬프트</span>
+      <div><button class="btn ghost" onclick="tClear()">선택 초기화</button> <button class="btn ghost" onclick="libAddFrom('번역기',document.getElementById('t_out').textContent)">라이브러리 저장</button> <button class="btn" onclick="cp('t_out')">복사</button></div></div>
+      <pre id="t_out"></pre></div>
+  </section>
+
+  <section id="s-copy">
+    <h2>카피·자막 대본 생성기 <span class="pill">훅→베네핏→CTA</span></h2>
+    <p class="sub">정보를 넣으면 시간 큐별 자막 대본 + 훅 3안 + 보이스오버 스크립트가 만들어집니다. 화장품 금지 표현도 자동 체크.</p>
+    <div class="card"><div class="grid">
+      <div class="field full"><label>제품/무엇</label><input type="text" id="c_prod" placeholder="예: 일리윤 히알루론 수분크림"></div>
+      <div class="field full"><label>핵심 베네핏 <span class="hint">쉼표로 1~3개</span></label><input type="text" id="c_ben" placeholder="예: 끈적임 없이 촉촉, 100ml 대용량, 지성도 OK"></div>
+      <div class="field"><label>타깃</label><input type="text" id="c_tgt" placeholder="예: 지성·복합성 20~30대"></div>
+      <div class="field"><label>영상 길이(초)</label><select id="c_len"><option>8</option><option selected>15</option><option>20</option><option>30</option></select></div>
+      <div class="field"><label>톤</label><select id="c_tone"><option>친근한 후기</option><option>신뢰감 있는</option><option>트렌디 발랄</option></select></div>
+      <div class="field"><label>CTA</label><input type="text" id="c_cta" value="지금 확인하기"></div>
+    </div></div>
+    <div class="card"><div class="out-head"><span class="lbl" style="margin:0">대본</span>
+      <div><button class="btn ghost" onclick="libAddFrom('카피',document.getElementById('c_out').textContent)">라이브러리 저장</button> <button class="btn" onclick="cp('c_out')">복사</button></div></div>
+      <pre id="c_out"></pre></div>
+    <div id="c_warn"></div>
+  </section>
+
+  <section id="s-planner">
+    <h2>30초 씬플래너 <span class="pill">끊김 없는 체이닝 설계</span></h2>
+    <p class="sub">긴 영상을 한 편처럼 이으려면 장면을 구간별로 나눠야 합니다. 총 길이·클립 한계를 고르면 구간이 자동 분할됩니다.</p>
+    <div class="card"><div class="grid">
+      <div class="field"><label>총 길이(초)</label><select id="p_total"><option>15</option><option>20</option><option selected>30</option></select></div>
+      <div class="field"><label>클립당 최대(초) <span class="hint">Seedance 15 / Veo 8</span></label><select id="p_clip"><option selected>15</option><option>8</option></select></div>
+    </div><div id="p_rows"></div></div>
+    <div class="card"><div class="out-head"><span class="lbl" style="margin:0">체이닝 플랜</span>
+      <div><button class="btn ghost" onclick="libAddFrom('씬플랜',document.getElementById('p_out').textContent)">라이브러리 저장</button> <button class="btn" onclick="cp('p_out')">복사</button></div></div>
+      <pre id="p_out"></pre></div>
+  </section>
+
+  <section id="s-lib">
+    <h2>내 프롬프트 라이브러리 <span class="pill">저장·재사용</span></h2>
+    <p class="sub">완성한 프롬프트를 이름 붙여 저장하면 브라우저에 영구 보관됩니다. 다른 탭의 "라이브러리 저장" 버튼으로도 담깁니다.</p>
+    <div class="card"><div class="grid">
+      <div class="field"><label>이름</label><input type="text" id="l_name" placeholder="예: 일리윤 UGC 15초"></div>
+      <div class="field"><label>분류(선택)</label><input type="text" id="l_tag" placeholder="예: 수분크림"></div>
+    </div>
+      <label style="margin-top:10px">프롬프트</label><textarea id="l_text" style="min-height:80px" placeholder="여기에 붙여넣거나 다른 탭에서 담기"></textarea>
+      <div style="margin-top:10px"><button class="btn" onclick="libAdd()">저장</button></div></div>
+    <div class="card" id="l_list"></div>
+  </section>
+
+  <section id="s-models">
+    <h2>모델 · 비용 치트시트</h2>
+    <p class="sub">"더 비싼 모델 = 더 좋은 광고"가 아닙니다. 포맷에 맞는 모델이 정답. 실제 크레딧은 생성 전 확인.</p>
+    <div class="card"><h3 style="margin-top:0">영상 모델 (Plus 기준, 8초 예시)</h3>
+      <table><tr><th>모델</th><th>8초</th><th>최대</th><th>언제</th></tr>
+        <tr><td>Seedance 2.0</td><td>~72(1080p)</td><td>15초</td><td>제품 일관성·기본·체이닝 베이스</td></tr>
+        <tr><td>Cinema Studio 3.0</td><td>~40</td><td>15초</td><td>시네마급 무드컷</td></tr>
+        <tr><td>Veo 3.1</td><td>22(fast)~</td><td>8초</td><td>초사실 히어로컷</td></tr></table></div>
+    <div class="card"><h3 style="margin-top:0">이미지 모델</h3>
+      <table><tr><th>모델</th><th>언제</th><th>비고</th></tr>
+        <tr><td>GPT Image 2</td><td>라벨·글자 정확</td><td>9:16 미지원</td></tr>
+        <tr><td>Nano Banana Pro</td><td>최고 품질·9:16</td><td>~2크레딧/장</td></tr>
+        <tr><td>Seedream 5.0 Lite</td><td>레퍼런스 편집</td><td>저가</td></tr></table></div>
+    <div class="warn"><b>크레딧 절약:</b> 테스트는 720p·짧게·사운드 off. 본작업만 1080p. 프리미엄은 아껴 쓰기.</div>
+  </section>
+
+  <section id="s-ref">
+    <h2>레퍼런스 영상 → 재현 프롬프트</h2>
+    <p class="sub">"이 영상처럼" 만들고 싶을 때. 영상 분석 → 재현 프롬프트 + 내 제품으로 교체(스왑).</p>
+    <div class="card"><h3 style="margin-top:0">진행 순서</h3>
+      <div class="step"><div class="n">1</div><div class="b">유튜브 링크 또는 영상 파일 <span class="hint">(짧을수록 정확, 30초 이내)</span></div></div>
+      <div class="step"><div class="n">2</div><div class="b">"이 영상처럼 만들어줘" + 링크 → 장면별 분석(3~5분)</div></div>
+      <div class="step"><div class="n">3</div><div class="b">장면표 + 자막/음성 + 목소리 추정 + 재현 프롬프트</div></div>
+      <div class="step"><div class="n">4</div><div class="b">내 제품으로 스왑 → 아래 첨부 가이드대로 업로드</div></div></div>
+    <div class="card"><h3 style="margin-top:0">제품 스왑 — 형태(폼팩터)가 맞아야 함</h3>
+      <table><tr><th>원본 형태</th><th>첨부할 제품</th><th>첨부 사진</th></tr>
+        <tr><td>립스틱/스틱</td><td>스틱·립·멀티스틱</td><td>닫힘 정면 / 뚜껑 열어 색 / 45°</td></tr>
+        <tr><td>단지형 크림</td><td>단지형 크림</td><td>정면 라벨 / 뚜껑 열어 제형 / 45°</td></tr>
+        <tr><td>튜브형</td><td>튜브형</td><td>정면 라벨 / 캡·노즐 / 짜낸 제형</td></tr>
+        <tr><td>펌프/보틀</td><td>펌프/보틀</td><td>정면 / 펌프 헤드 / 측면</td></tr></table>
+      <div class="warn"><b>주의:</b> 형태가 다르면(단지→립스틱) 손동작이 깨져 스왑 안 됨. 경쟁사 광고 1:1 복제는 저작권 위험 — 스타일 참고로만.</div></div>
+  </section>
+
+  <section id="s-check">
+    <h2>막히기 전 체크리스트</h2>
+    <p class="sub">자주 막히는 지점들. 생성 전 훑어보세요.</p>
+    <div class="card"><ul class="chk">
+      <li>MCP URL 끝에 <b>/mcp</b> 붙였나?</li>
+      <li>영상이 "basic 플랜 필요"로 막히면 → 유료 결제(무료는 이미지만)</li>
+      <li>제품 사진은 채팅이 아니라 <b>업로드 창</b>에 올렸나?</li>
+      <li>비싼 생성 전 <b>크레딧 비용</b> 확인했나?</li>
+      <li>비율·길이를 게재 위치에 맞췄나? (릴스 9:16)</li>
+      <li>첫 1~2초 <b>훅</b>을 설계했나?</li>
+      <li>화장품 <b>금지 표현</b>(미백·주름개선·치료) 뺐나?</li>
+      <li>30초는 <b>체이닝</b>(끝프레임→시작프레임)으로 이었나?</li>
+      <li>레퍼런스 재현은 <b>제품 형태</b>가 맞나?</li>
+    </ul></div>
+  </section>
+</main>
+<div class="toast" id="toast">복사됨!</div>
+<script>
+var TABS=[['start','시작하기'],['builder','프롬프트 빌더'],['translator','프롬프트 번역기'],['copy','카피·자막'],['planner','씬플래너'],['lib','내 라이브러리'],['models','모델·비용'],['ref','레퍼런스 재현'],['check','체크리스트']];
+var navEl=document.getElementById('nav');
+TABS.forEach(function(p){var b=document.createElement('button');b.textContent=p[1];b.dataset.k=p[0];b.onclick=function(){go(p[0]);};navEl.appendChild(b);});
+function go(k){TABS.forEach(function(p){document.getElementById('s-'+p[0]).classList.toggle('on',p[0]===k);});
+  Array.prototype.forEach.call(navEl.children,function(b){b.classList.toggle('on',b.dataset.k===k);});window.scrollTo({top:0,behavior:'smooth'});}
+go('start');
+
+function ls_load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
+function ls_save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function cp(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(toast);}
+function val(id){return document.getElementById(id).value.trim();}
+function radio(n){return document.querySelector('input[name="'+n+'"]:checked').value;}
+function toast(){var t=document.getElementById('toast');t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1300);}
+
+var bMoods=["청량하고 수분감 있는","미니멀 고급","따뜻하고 감성적인","트렌디 Y2K","내추럴 데일리","시네마틱"];
+var bmc=document.getElementById('b_moodchips');
+bMoods.forEach(function(m){var c=document.createElement('span');c.className='chip';c.textContent=m;c.onclick=function(){document.getElementById('b_mood').value=m;bBuild();};bmc.appendChild(c);});
+['b_product','b_mood','b_length','b_ratio','b_format','b_vmodel','b_imodel','b_ending'].forEach(function(id){document.getElementById(id).addEventListener('input',bBuild);});
+document.querySelectorAll('input[name=b_photo]').forEach(function(r){r.addEventListener('change',bBuild);});
+function bBuild(){
+  var product=val('b_product')||'(제품 링크 붙여넣기)',mood=val('b_mood')||'청량하고 수분감 있는',length=val('b_length'),ratio=val('b_ratio'),ending=val('b_ending')||'로고로 끝',fmt=val('b_format'),vmodel=val('b_vmodel'),imodel=val('b_imodel');
+  var photo=radio('b_photo')==='upload'?'업로드 창에 제품 사진을 올릴게':'AI가 생성';
+  var sec=parseInt(length,10)||15;
+  var longform=sec>15?'   - '+length+'는 한 클립 한계를 넘으니 끊김 없이 체이닝(같은 모델·레퍼런스, 끝프레임→시작프레임, 비율·색감·카메라 동선 연속).':'   - 한 클립 원테이크로 끊김 없이.';
+  var p='【내 정보】\n- 제품: '+product+'\n- 분위기: '+mood+'\n- 길이: '+length+' / 비율: '+ratio+' / 포맷: '+fmt+'\n- 영상 모델: '+vmodel+' / 이미지 모델: '+imodel+'\n- 사진: '+photo+' / 마무리: '+ending+
+  '\n\n【클로드 지침 — 그대로】\n위 정보로 "'+fmt+'" 광고 영상을 만들어줘. 매 단계 네 추천안을 먼저 제시하고 내 승인을 받아줘(나는 초보야).\n0. 크레딧·플랜 확인. 무료면 영상 막히니 먼저 알려줘.\n1. 제품(+레퍼런스) 분석 → 톤·컬러·메시지·타깃.\n2. \''+vmodel+'\' 최신 프롬프트 작성법을 웹에서 찾아 적용(원테이크, 구간 카메라, 흔들림 방지).\n3. \''+imodel+'\'로 광고 이미지 4장(제품/질감/사용/일상). 제품 사진을 레퍼런스로 제품 유지.\n4. 광고 카피+자막 대본(훅→베네핏→CTA, 화장품 금지표현 배제).\n5. 시작 프레임 물려 '+length+' '+ratio+' 영상:\n'+longform+'\n   - 마지막은 "'+ending+'".\n[꼭] 비용 큰 생성 전 get_cost로 크레딧 확인 후 승인. 조용한 재시도 금지.';
+  document.getElementById('b_out').textContent=p;
+  ls_save('site_b',{a:val('b_product'),b:val('b_mood'),c:val('b_length'),d:val('b_ratio'),e:val('b_format'),f:val('b_vmodel'),g:val('b_imodel'),h:val('b_ending'),photo:radio('b_photo')});
+}
+function bRestore(){var s=ls_load('site_b',null);if(!s)return;var map={a:'b_product',b:'b_mood',c:'b_length',d:'b_ratio',e:'b_format',f:'b_vmodel',g:'b_imodel',h:'b_ending'};
+  Object.keys(map).forEach(function(k){if(s[k]!==undefined)document.getElementById(map[k]).value=s[k];});
+  if(s.photo)document.querySelector('input[name=b_photo][value="'+s.photo+'"]').checked=true;}
+function bReset(){localStorage.removeItem('site_b');location.reload();}
+bRestore();bBuild();
+
+var TDEF={
+ person:{title:'인물',opts:[
+  {label:'한국인 20대 인플루언서 여성',desc:'a Korean woman in her mid-20s, influencer style, dewy glass skin, natural glam makeup, long sleek dark-brown hair, trendy casual-chic outfit, bright confident expression'},
+  {label:'한국인 30대 전문직 여성',desc:'a Korean woman in her early 30s, polished professional look, soft natural makeup, neat shoulder-length hair, smart blouse'},
+  {label:'40대 신뢰감 회사원 남성',desc:'a Korean man in his 40s, trustworthy corporate look, neat short hair, light stubble, well-fitted dress shirt, calm reassuring expression'},
+  {label:'20대 쾌남 스타일 남성',desc:'a Korean man in his mid-20s, fresh clean-cut handsome look, healthy skin, styled hair, smart-casual outfit, friendly energetic vibe'},
+  {label:'10대 학생 느낌',desc:'a Korean teenager, youthful fresh face, minimal makeup, casual outfit, cheerful expression'},
+  {label:'50대 신뢰 시니어',desc:'a Korean person in their 50s, warm trustworthy senior look, natural grey-touched hair, gentle authoritative presence'}]},
+ bg:{title:'배경',opts:[
+  {label:'아늑한 집 거실',desc:'a cozy home living room, warm ambient light, soft sofa, plants'},
+  {label:'모던 사무실',desc:'a modern minimalist office, glass partitions, neutral tones, natural daylight'},
+  {label:'야외 공원',desc:'an outdoor park, greenery, soft natural sunlight, gentle bokeh'},
+  {label:'트렌디 카페',desc:'a trendy cafe, wooden tables, warm cozy lighting'},
+  {label:'밝은 스튜디오',desc:'a clean bright photo studio, seamless backdrop'},
+  {label:'욕실 세면대',desc:'a bright clean bathroom vanity, fresh dewy mood'}]},
+ voice:{title:'보이스',opts:[
+  {label:'20대 인플루언서 여성',desc:'young Korean female voice, mid-20s, bright friendly influencer tone'},
+  {label:'30대 쾌남 남성',desc:'Korean male voice, early 30s, warm confident masculine tone'},
+  {label:'신뢰감 중년 남성',desc:'mature Korean male voice, calm authoritative reassuring'},
+  {label:'차분한 여성 내레이션',desc:'soft calm Korean female narration voice'}]},
+ pace:{title:'말 빠르기·톤',opts:[
+  {label:'약간 빠른 아나운서톤',desc:'slightly fast, crisp announcer-like clear delivery'},
+  {label:'차분하고 또박또박',desc:'calm, clearly articulated, unhurried delivery'},
+  {label:'친근한 수다체',desc:'casual friendly conversational pace'},
+  {label:'에너지 넘치는',desc:'energetic upbeat lively delivery'}]},
+ camera:{title:'카메라',opts:[
+  {label:'핸드헬드 셀피',desc:'handheld selfie-style camera, slight natural shake, authentic UGC feel'},
+  {label:'삼각대 고정 정면',desc:'static tripod front-facing shot'},
+  {label:'클로즈업',desc:'close-up framing, shallow depth of field'},
+  {label:'천천히 다가가는 트래킹',desc:'slow cinematic dolly-in tracking movement'}]},
+ light:{title:'조명',opts:[
+  {label:'소프트 하이키',desc:'soft high-key lighting, bright clean'},
+  {label:'자연광',desc:'natural window daylight, soft shadows'},
+  {label:'시네마틱 로우키',desc:'cinematic low-key moody lighting'},
+  {label:'따뜻한 웜톤',desc:'warm golden-toned light'}]},
+ style:{title:'스타일·포맷',opts:[
+  {label:'UGC 리얼 후기',desc:'authentic UGC style, filmed on a phone, natural not polished'},
+  {label:'시네마틱 광고',desc:'polished cinematic commercial look'},
+  {label:'언박싱',desc:'unboxing style, hands revealing the product'},
+  {label:'튜토리얼',desc:'step-by-step tutorial demonstration'}]},
+ spec:{title:'비율·길이',opts:[
+  {label:'9:16 · 15초',desc:'vertical 9:16, about 15 seconds'},
+  {label:'9:16 · 8초',desc:'vertical 9:16, about 8 seconds'},
+  {label:'1:1 · 15초',desc:'square 1:1, about 15 seconds'},
+  {label:'16:9 · 30초',desc:'horizontal 16:9, about 30 seconds'}]}
+};
+var TMORE={
+ person:[
+  {label:'20대 대학생 여성(풋풋)',desc:'a Korean female college student in her early 20s, fresh youthful face, minimal natural makeup, casual campus outfit'},
+  {label:'30대 워킹맘',desc:'a Korean working mom in her 30s, warm approachable look, tidy hairstyle, smart-casual outfit, caring expression'},
+  {label:'헬스 트레이너 남성(근육질)',desc:'a muscular Korean male fitness trainer, athletic build, sportswear, healthy skin, energetic confident posture'},
+  {label:'뷰티 유튜버 여성(화려)',desc:'a Korean beauty YouTuber woman, glamorous full makeup, styled hair, expressive face, trendy chic outfit'},
+  {label:'미니멀 시크 여성(모델핏)',desc:'a Korean woman with minimal chic model look, tall slim figure, monochrome outfit, sharp elegant features'},
+  {label:'다정한 아빠(30대 남)',desc:'a friendly Korean dad in his 30s, warm gentle smile, casual clothes, approachable family-man vibe'},
+  {label:'힙한 Z세대 남성(스트리트)',desc:'a hip Korean Gen-Z man, street fashion, layered trendy outfit, styled hair, cool confident energy'},
+  {label:'우아한 40대 여성(고급)',desc:'an elegant Korean woman in her 40s, refined luxurious look, polished makeup, sophisticated outfit'},
+  {label:'셰프/요리사',desc:'a Korean chef in an apron or chef uniform, clean professional kitchen look, confident friendly expression'},
+  {label:'반려동물과 함께인 여성',desc:'a Korean woman holding a cute pet, cozy warm vibe, soft casual outfit, affectionate expression'},
+  {label:'애슬레저 운동복 여성',desc:'a Korean woman in athleisure activewear, fit healthy body, fresh sporty look, energetic expression'},
+  {label:'정장 CEO 남성(권위)',desc:'a Korean male CEO in a tailored suit, authoritative trustworthy presence, neat hair, composed expression'},
+  {label:'러블리 20대 여성',desc:'a lovely cute Korean woman in her 20s, soft features, pastel feminine outfit, sweet cheerful smile'},
+  {label:'신생아맘(아기피부 강조)',desc:'a gentle Korean new mom holding a baby, tender caring expression, emphasis on soft healthy skin'}
+ ],
+ bg:[
+  {label:'미니멀 화장대',desc:'a minimal vanity table, soft lighting, tidy cosmetics, clean aesthetic'},
+  {label:'주방 아일랜드',desc:'a modern kitchen island, bright clean counters, warm home mood'},
+  {label:'호텔 스위트룸',desc:'a luxury hotel suite, elegant interior, soft ambient light'},
+  {label:'도심 야경 거리',desc:'a nighttime city street with neon lights and bokeh, urban vibe'},
+  {label:'해변(일몰)',desc:'a beach at sunset, golden light, gentle waves, warm relaxed mood'},
+  {label:'아늑한 침실',desc:'a cozy bedroom, soft bedding, warm intimate lighting'},
+  {label:'편집숍/부티크',desc:'a stylish boutique interior, curated displays, trendy retail mood'},
+  {label:'야외 테라스',desc:'an outdoor terrace with plants, soft daylight, relaxed vibe'},
+  {label:'지하철/버스 안',desc:'inside a subway or bus, everyday commute setting, candid realism'},
+  {label:'헬스장',desc:'a modern gym with equipment, energetic athletic atmosphere'},
+  {label:'도서관/서재',desc:'a quiet library or home study, bookshelves, calm focused mood'},
+  {label:'벚꽃 배경(봄)',desc:'a spring cherry-blossom background, soft pink petals, dreamy daylight'},
+  {label:'눈 오는 겨울 거리',desc:'a snowy winter street, cool crisp air, cozy seasonal mood'},
+  {label:'럭셔리 백화점 매장',desc:'a luxury department store counter, premium glossy displays, upscale lighting'}
+ ],
+ voice:[
+  {label:'발랄한 10대 여성',desc:'a bubbly Korean teenage female voice, cheerful and youthful'},
+  {label:'성숙한 30대 여성',desc:'a mature Korean female voice in her 30s, composed and warm'},
+  {label:'굵은 저음 남성',desc:'a deep low-pitched Korean male voice, rich and commanding'},
+  {label:'다정한 엄마 톤 여성',desc:'a warm caring Korean motherly female voice'},
+  {label:'시크한 도시 여성',desc:'a chic cool urban Korean female voice'},
+  {label:'활기찬 쇼호스트 남성',desc:'a lively Korean male shopping-host voice, upbeat and persuasive'},
+  {label:'감성 속삭임 여성(ASMR)',desc:'a soft whispering Korean female voice, intimate ASMR-like'},
+  {label:'프로 아나운서 여성',desc:'a professional Korean female announcer voice, clear and polished'},
+  {label:'유쾌한 개그 톤 남성',desc:'a funny playful Korean male voice, humorous energy'},
+  {label:'따뜻한 시니어 여성',desc:'a warm senior Korean female voice, gentle and reassuring'},
+  {label:'젊은 브이로거 남성',desc:'a young Korean male vlogger voice, casual and friendly'},
+  {label:'카리스마 강연자 남성',desc:'a charismatic Korean male speaker voice, confident and inspiring'},
+  {label:'청량한 20대 남성',desc:'a fresh clear Korean male voice in his 20s'},
+  {label:'우아한 40대 여성',desc:'an elegant refined Korean female voice in her 40s'},
+  {label:'귀여운 하이톤 여성',desc:'a cute high-pitched Korean female voice'},
+  {label:'다큐 내레이터 남성',desc:'a documentary-style Korean male narrator voice, calm authoritative'}
+ ],
+ pace:[
+  {label:'아주 느리고 감성적',desc:'very slow and emotional delivery'},
+  {label:'속사포 쇼핑호스트',desc:'very fast rapid-fire shopping-host delivery'},
+  {label:'신뢰감 안정된',desc:'steady trustworthy measured delivery'},
+  {label:'발랄 통통 튀는',desc:'bouncy lively playful delivery'},
+  {label:'진지하고 무게감',desc:'serious weighty deliberate delivery'},
+  {label:'속삭이듯 부드럽게',desc:'soft whisper-like gentle delivery'},
+  {label:'리듬감 랩 느낌',desc:'rhythmic rap-like cadence'},
+  {label:'담백 군더더기 없는',desc:'plain concise no-frills delivery'},
+  {label:'다정하게 설득',desc:'warm gently persuasive delivery'},
+  {label:'자신감 단호한',desc:'confident assertive firm delivery'},
+  {label:'편안한 브이로그',desc:'relaxed casual vlog-style delivery'},
+  {label:'긴박감(한정판매)',desc:'urgent time-pressured delivery, limited-offer energy'},
+  {label:'유머러스 장난스러운',desc:'humorous playful teasing delivery'},
+  {label:'뉴스 브리핑 톤',desc:'crisp news-briefing delivery'},
+  {label:'힐링 명상 톤',desc:'calm soothing meditative delivery'},
+  {label:'열정적 응원 톤',desc:'passionate cheering encouraging delivery'}
+ ],
+ camera:[
+  {label:'드론 부감(하이앵글)',desc:'aerial drone high-angle shot, sweeping overhead view'},
+  {label:'로우앵글(웅장)',desc:'low-angle shot looking up, powerful grand feel'},
+  {label:'오버더숄더',desc:'over-the-shoulder shot'},
+  {label:'360도 회전',desc:'a 360-degree orbiting camera around the subject'},
+  {label:'슬로모션',desc:'slow-motion capture, smooth dramatic timing'},
+  {label:'빠른 컷 몽타주',desc:'fast-cut montage of quick shots'},
+  {label:'POV 1인칭',desc:'first-person POV perspective'},
+  {label:'매크로 초근접(제형)',desc:'extreme macro close-up on product texture'},
+  {label:'달리 아웃(빠지기)',desc:'dolly-out pulling away from the subject'},
+  {label:'짐벌 부드러운 이동',desc:'smooth gimbal gliding movement'},
+  {label:'틸트 업/다운',desc:'vertical tilt up or down reveal'},
+  {label:'손 클로즈업(시연)',desc:'close-up on hands demonstrating the product'},
+  {label:'미러 셀피',desc:'mirror selfie framing'},
+  {label:'와이드 풀샷',desc:'wide full-body shot'},
+  {label:'더치 앵글(기울임)',desc:'tilted dutch-angle framing, dynamic tension'},
+  {label:'프리즈 프레임 강조',desc:'freeze-frame emphasis moment'}
+ ],
+ light:[
+  {label:'골든아워 역광',desc:'golden-hour backlight, warm glowing rim light'},
+  {label:'네온(도심 야경)',desc:'neon lighting, colorful urban night glow'},
+  {label:'링라이트 뷰티광',desc:'ring-light beauty lighting, even flattering glow'},
+  {label:'쿨톤 클린',desc:'cool-toned clean bright light'},
+  {label:'창가 사이드라이트',desc:'soft window side light'},
+  {label:'캔들/무드 조명',desc:'candle-lit moody warm ambience'},
+  {label:'스포트라이트 극적',desc:'dramatic spotlight, strong focused beam'},
+  {label:'백라이트 실루엣',desc:'backlit silhouette effect'},
+  {label:'파스텔 몽환',desc:'dreamy pastel soft lighting'},
+  {label:'하드 그림자 대비',desc:'hard shadows, high-contrast lighting'},
+  {label:'오버캐스트 부드러움',desc:'soft overcast diffused light'},
+  {label:'컬러젤(핑크/블루)',desc:'colored gel lighting, pink and blue tones'},
+  {label:'아침 햇살 상쾌',desc:'fresh morning sunlight, airy feel'},
+  {label:'석양 오렌지',desc:'warm orange sunset glow'},
+  {label:'스튜디오 3점 조명',desc:'professional three-point studio lighting'},
+  {label:'반짝 보케 배경광',desc:'sparkling bokeh background lights'}
+ ],
+ style:[
+  {label:'하이퍼모션 제형',desc:'hyper-motion product texture showcase'},
+  {label:'비포&애프터',desc:'before-and-after comparison format'},
+  {label:'GRWM(겟레디윗미)',desc:'get-ready-with-me style'},
+  {label:'제품 리뷰',desc:'honest product review format'},
+  {label:'밈/유머 숏폼',desc:'meme-style humorous short-form'},
+  {label:'ASMR 감각',desc:'ASMR sensory style, crisp sounds and close-ups'},
+  {label:'럭셔리 브랜드 필름',desc:'luxury brand film, premium cinematic tone'},
+  {label:'Y2K 레트로',desc:'Y2K retro camcorder aesthetic'},
+  {label:'다큐멘터리',desc:'documentary style, observational realism'},
+  {label:'스톱모션',desc:'stop-motion animation style'},
+  {label:'3D 렌더 CG',desc:'clean 3D rendered CG look'},
+  {label:'애니메이션풍',desc:'animated illustrated style'},
+  {label:'필름 그레인 빈티지',desc:'vintage film-grain look'},
+  {label:'미니멀 감성',desc:'minimal aesthetic mood'},
+  {label:'스트리트 브이로그',desc:'street vlog handheld style'},
+  {label:'광고 시즐샷',desc:'commercial sizzle-shot, glossy appetizing visuals'}
+ ],
+ spec:[
+  {label:'9:16 · 5초',desc:'vertical 9:16, about 5 seconds'},
+  {label:'9:16 · 30초',desc:'vertical 9:16, about 30 seconds'},
+  {label:'4:5 · 15초',desc:'portrait 4:5, about 15 seconds'},
+  {label:'1:1 · 8초',desc:'square 1:1, about 8 seconds'},
+  {label:'16:9 · 15초',desc:'horizontal 16:9, about 15 seconds'},
+  {label:'9:16 · 20초',desc:'vertical 9:16, about 20 seconds'},
+  {label:'4:5 · 8초',desc:'portrait 4:5, about 8 seconds'},
+  {label:'16:9 · 60초',desc:'horizontal 16:9, about 60 seconds'},
+  {label:'9:16 · 3초(훅)',desc:'vertical 9:16, about 3 seconds hook clip'},
+  {label:'1:1 · 30초',desc:'square 1:1, about 30 seconds'},
+  {label:'21:9 · 15초(시네마)',desc:'cinematic 21:9, about 15 seconds'},
+  {label:'9:16 · 10초',desc:'vertical 9:16, about 10 seconds'},
+  {label:'4:5 · 30초',desc:'portrait 4:5, about 30 seconds'},
+  {label:'2:3 · 15초',desc:'portrait 2:3, about 15 seconds'},
+  {label:'16:9 · 45초',desc:'horizontal 16:9, about 45 seconds'},
+  {label:'9:16 · 60초',desc:'vertical 9:16, about 60 seconds'}
+ ]
+};
+Object.keys(TMORE).forEach(function(k){if(TDEF[k])TDEF[k].opts=TDEF[k].opts.concat(TMORE[k]);});
+var PVB="https://d8j0ntlcm91z4.cloudfront.net/user_3FZXLeq7PhSR6ydqZofct8uuWjg/";
+var PREVIEW={camera:{
+ '핸드헬드 셀피':PVB+'hf_20260702_114806_a17572c8-7604-431a-818e-0b285695e158_min.webp',
+ '삼각대 고정 정면':PVB+'hf_20260702_114828_64cd41f5-3e60-44d8-b111-abbd8d21b38f_min.webp',
+ '클로즈업':PVB+'hf_20260702_114808_7716eaad-62f5-48cb-b4e0-592500977021_min.webp',
+ '천천히 다가가는 트래킹':PVB+'hf_20260702_114845_1649ede6-5b27-4e07-beaa-56cbdc469ab2_min.webp',
+ '드론 부감(하이앵글)':PVB+'hf_20260702_114832_d32b583c-837f-4745-a621-715cb2080e4d_min.webp',
+ '로우앵글(웅장)':PVB+'hf_20260702_114846_234c718b-2b55-42a6-9d6e-b87f73ec4243_min.webp',
+ '오버더숄더':PVB+'hf_20260702_114859_14dba123-f57f-47ee-9308-989c0f3be923_min.webp',
+ '360도 회전':PVB+'hf_20260702_114901_b7ba2c06-664a-4ab6-bb60-5e4339bf52fd_min.webp',
+ '슬로모션':PVB+'hf_20260702_114910_acc51c43-08f3-447f-90fa-aff1cc1c70d8_min.webp',
+ '빠른 컷 몽타주':PVB+'hf_20260702_114912_0f7b6a1f-4421-4369-9af2-15f15ce30b33_min.webp',
+ 'POV 1인칭':PVB+'hf_20260702_114920_24d58483-5b83-468e-b7b0-1b28f9b18aa2_min.webp',
+ '매크로 초근접(제형)':PVB+'hf_20260702_114922_9b5a9122-8737-4d8c-9ee5-be4c319b3164_min.webp',
+ '달리 아웃(빠지기)':PVB+'hf_20260702_114934_9d809c35-2238-4db3-bcda-d6eab6a0546a_min.webp',
+ '짐벌 부드러운 이동':PVB+'hf_20260702_114936_b3ba9d8d-92a1-4ed0-9546-a66e799ece62_min.webp',
+ '틸트 업/다운':PVB+'hf_20260702_114948_592b9ffc-e5a8-4c6a-ad5e-613007a8f490_min.webp',
+ '손 클로즈업(시연)':PVB+'hf_20260702_114951_9113f4bb-6921-4b76-b62f-98f2c4fc45c4_min.webp',
+ '미러 셀피':PVB+'hf_20260702_115002_aec40237-84ec-4dd2-bdba-069cba06e3f2_min.webp',
+ '와이드 풀샷':PVB+'hf_20260702_115003_7ffb1993-0fc7-42a4-8a05-765140d9cd7d_min.webp',
+ '더치 앵글(기울임)':PVB+'hf_20260702_115011_1c134de0-b63f-4174-ac12-2d51ba8361ac_min.webp',
+ '프리즈 프레임 강조':PVB+'hf_20260702_115013_03a45064-45df-4a4a-bcf5-9b03bcae56e4_min.webp'
+},light:{
+ '소프트 하이키':PVB+'hf_20260702_145530_264b48bd-17eb-48b4-a634-866901ebbd83_min.webp',
+ '자연광':PVB+'hf_20260702_145544_cad57ca9-73df-4d84-acbf-60ee6ae20f10_min.webp',
+ '시네마틱 로우키':PVB+'hf_20260702_145548_bd27f21f-6d8d-40e1-a505-4da6871122ce_min.webp',
+ '따뜻한 웜톤':PVB+'hf_20260702_145605_9490d6f1-952e-4b4b-a11b-4d5bcef615c5_min.webp',
+ '골든아워 역광':PVB+'hf_20260702_145609_0cb931b1-809d-41da-8bc1-2537a63f3661_min.webp',
+ '네온(도심 야경)':PVB+'hf_20260702_145623_481e49fa-ef7a-43c7-8615-8f2561aee5e5_min.webp',
+ '링라이트 뷰티광':PVB+'hf_20260702_145627_a0ece1cd-ac86-4b30-ac62-b788eea4413c_min.webp',
+ '쿨톤 클린':PVB+'hf_20260702_145642_cf40d36a-b6c7-48ae-a1f7-4a0964787197_min.webp',
+ '창가 사이드라이트':PVB+'hf_20260702_145646_19d658a7-fc10-4c88-9c10-fe7b1764175d_min.webp',
+ '캔들/무드 조명':PVB+'hf_20260702_150150_39f106ea-0584-4a22-b0db-cb1b71bc47a9_min.webp',
+ '스포트라이트 극적':PVB+'hf_20260702_145701_0390a88e-a38c-49fc-aab0-1e578614d3b3_min.webp',
+ '백라이트 실루엣':PVB+'hf_20260702_145715_ee5704ce-1be5-4298-a6e3-e0f437940772_min.webp',
+ '파스텔 몽환':PVB+'hf_20260702_145717_499958d0-09f1-4f5a-9e8f-5810e505a957_min.webp',
+ '하드 그림자 대비':PVB+'hf_20260702_145730_8db5b550-b1ed-47b3-9270-a76142c963d9_min.webp',
+ '오버캐스트 부드러움':PVB+'hf_20260702_145733_df7201d7-aa45-4c21-884c-3fc03d48b236_min.webp',
+ '컬러젤(핑크/블루)':PVB+'hf_20260702_145745_e9c5515a-dd10-449a-8e58-e255a5fba173_min.webp',
+ '아침 햇살 상쾌':PVB+'hf_20260702_145748_3b35e49b-cd8a-49d8-a900-40c7135da27a_min.webp',
+ '석양 오렌지':PVB+'hf_20260702_145801_0fa53356-49b8-46c6-b718-894405ae22ac_min.webp',
+ '스튜디오 3점 조명':PVB+'hf_20260702_145803_e752994e-fdc7-4240-b015-32dcb6060282_min.webp',
+ '반짝 보케 배경광':PVB+'hf_20260702_145814_ee6c4d39-b966-4cf7-a09a-ae7452b69d29_min.webp'
+},person:{
+ '한국인 20대 인플루언서 여성':PVB+'hf_20260702_112539_d7793671-1da8-4675-b372-9285b8aa375b_min.webp',
+ '한국인 30대 전문직 여성':PVB+'hf_20260702_112541_24a2967b-dcad-4d40-a47a-755b9fce1c7a_min.webp',
+ '40대 신뢰감 회사원 남성':PVB+'hf_20260702_112543_6e7e42c8-ebf4-40b0-95e3-83969d086027_min.webp',
+ '20대 쾌남 스타일 남성':PVB+'hf_20260702_112545_8db2389b-8635-4502-ba19-03891ff5f7e9_min.webp',
+ '10대 학생 느낌':PVB+'hf_20260702_112547_ef8560c3-46cb-4ba9-bcc5-d67607a72ee7_min.webp',
+ '50대 신뢰 시니어':PVB+'hf_20260702_112602_772a151a-8f9f-4b09-b2b5-ae32f0571a10_min.webp',
+ '20대 대학생 여성(풋풋)':PVB+'hf_20260702_112604_7c5bb2a7-2e19-43f9-966d-c98b0fc766e9_min.webp',
+ '30대 워킹맘':PVB+'hf_20260702_112606_cd7ca41d-2ecc-4011-a57a-ad1f3cd51a23_min.webp',
+ '헬스 트레이너 남성(근육질)':PVB+'hf_20260702_112610_c45b31aa-fdae-4df0-b15f-6eb1eb74a785_min.webp',
+ '뷰티 유튜버 여성(화려)':PVB+'hf_20260702_112612_70e3a852-4c3a-407b-998d-d3f7e0edf2db_min.webp',
+ '미니멀 시크 여성(모델핏)':PVB+'hf_20260702_112622_5804f818-796b-4524-8503-b77c2adfdd84_min.webp',
+ '다정한 아빠(30대 남)':PVB+'hf_20260702_112624_ba218b7d-7895-4f87-8a92-f548dbf3dac5_min.webp',
+ '힙한 Z세대 남성(스트리트)':PVB+'hf_20260702_112630_ea971579-f096-4405-b25f-51c8e5325399_min.webp',
+ '우아한 40대 여성(고급)':PVB+'hf_20260702_112632_0d0a4af8-4828-420d-9268-d8e72d45740c_min.webp',
+ '셰프/요리사':PVB+'hf_20260702_112633_8b8d1e9e-179c-456e-8b4b-bc5694a13ed4_min.webp',
+ '반려동물과 함께인 여성':PVB+'hf_20260702_112641_25d17984-e5ce-4d00-86e8-f54104bd107b_min.webp',
+ '애슬레저 운동복 여성':PVB+'hf_20260702_112643_60525ad8-dc97-4eaa-b4c3-6d6726219229_min.webp',
+ '정장 CEO 남성(권위)':PVB+'hf_20260702_112645_5fd16a2d-e9de-48e3-aa20-00687d8c8f80_min.webp',
+ '러블리 20대 여성':PVB+'hf_20260702_112647_7655b8fb-c3dc-4714-bf01-50dc2794a174_min.webp',
+ '신생아맘(아기피부 강조)':PVB+'hf_20260702_112649_c5e5c52c-9e9a-44c0-9320-6d1554c685fc_min.webp'
+},style:{
+ 'UGC 리얼 후기':PVB+'hf_20260702_152700_2a460e2c-ece2-4e06-9330-77137872c79c_min.webp',
+ '시네마틱 광고':PVB+'hf_20260702_152611_e501ea79-1e3e-449a-9d88-64beebad2dc0_min.webp',
+ '언박싱':PVB+'hf_20260702_152702_bbc3734b-dbd3-43fc-95f8-5a24af41d9cb_min.webp',
+ '튜토리얼':PVB+'hf_20260702_152704_6f4c074f-d4b7-4a04-b6f8-b7fd6d789d26_min.webp',
+ '하이퍼모션 제형':PVB+'hf_20260702_152614_38337df7-249d-47f0-865d-22eea0caa722_min.webp',
+ '비포&애프터':PVB+'hf_20260702_152706_ffcd078f-8041-4138-a8f4-d85011973f23_min.webp',
+ 'GRWM(겟레디윗미)':PVB+'hf_20260702_152710_efe9e8c6-bc06-4211-b1d5-22caa4b7782e_min.webp',
+ '제품 리뷰':PVB+'hf_20260702_152714_a3c3d058-175b-4a4d-917d-9c2ff9b72107_min.webp',
+ '밈/유머 숏폼':PVB+'hf_20260702_152715_b75c2aaa-3ba1-423f-bc26-a5ccfd2314c4_min.webp',
+ 'ASMR 감각':PVB+'hf_20260702_152718_13ab1126-5be0-4de4-9546-1e3e2c6e1fd7_min.webp',
+ '럭셔리 브랜드 필름':PVB+'hf_20260702_152616_6b7410e0-2a44-4bfb-84ee-de5c3f8a5d6a_min.webp',
+ 'Y2K 레트로':PVB+'hf_20260702_152618_98edb373-6b18-4ed2-9a94-8ecf0118beca_min.webp',
+ '다큐멘터리':PVB+'hf_20260702_152721_90bbc4b2-f07c-4193-bb8b-6b5ff04b0a8f_min.webp',
+ '스톱모션':PVB+'hf_20260702_152622_028ac41f-a653-4b06-8f1e-7c05d59339be_min.webp',
+ '3D 렌더 CG':PVB+'hf_20260702_152625_b99965fe-d609-40ae-a5ff-012d8e3cb99f_min.webp',
+ '애니메이션풍':PVB+'hf_20260702_152629_e996a033-0e7e-4c34-823a-1db9f69bae14_min.webp',
+ '필름 그레인 빈티지':PVB+'hf_20260702_152632_0561b517-5393-48fb-bd1b-ad74da0d395b_min.webp',
+ '미니멀 감성':PVB+'hf_20260702_152635_a1fc5a21-e943-47ff-a539-334a088774d4_min.webp',
+ '스트리트 브이로그':PVB+'hf_20260702_152724_1ecf4317-2f5e-4e06-a37f-df24df79e01c_min.webp',
+ '광고 시즐샷':PVB+'hf_20260702_152636_0b129411-d95b-4038-9111-deed6d1090e8_min.webp'
+},bg:{
+ '아늑한 집 거실':PVB+'hf_20260702_104934_3da4c288-1306-4c3b-96ea-575e1cd15f5e_min.webp',
+ '모던 사무실':PVB+'hf_20260702_104940_355eeee6-e4d3-4554-bcab-f7bdf29a02f7_min.webp',
+ '야외 공원':PVB+'hf_20260702_104942_5d2cab70-c8d9-4f9b-9090-27f8883d40ba_min.webp',
+ '트렌디 카페':PVB+'hf_20260702_104945_36e0c39b-bb9e-40e4-831a-d1c922a4ba1b_min.webp',
+ '밝은 스튜디오':PVB+'hf_20260702_104956_90bc6372-70f6-4ccc-b8c0-a3ed6fe9398b_min.webp',
+ '욕실 세면대':PVB+'hf_20260702_105000_15092832-d88f-40bf-8199-790d1e0b964b_min.webp',
+ '미니멀 화장대':PVB+'hf_20260702_105002_e932d697-16fd-4d37-a74a-c746280ba286_min.webp',
+ '주방 아일랜드':PVB+'hf_20260702_105003_91c13eac-e90b-4c52-ae5c-9aacab1e2ae9_min.webp',
+ '호텔 스위트룸':PVB+'hf_20260702_105018_018ca02b-9a3a-490d-8e5c-25253a2df3ed_min.webp',
+ '도심 야경 거리':PVB+'hf_20260702_105022_6adf322f-0d63-4163-95f0-7eceaa5f7ae8_min.webp',
+ '해변(일몰)':PVB+'hf_20260702_105025_63ffb3bc-594b-4bd8-8611-51511d2703cf_min.webp',
+ '아늑한 침실':PVB+'hf_20260702_105027_81a1f198-c9fe-4e94-81cd-fd4d560b7c5b_min.webp',
+ '편집숍/부티크':PVB+'hf_20260702_105037_fdeba8f2-d7b4-478d-b787-28ab96ae8a55_min.webp',
+ '야외 테라스':PVB+'hf_20260702_105039_3fd29d5b-b722-4aca-98c9-868f094885d1_min.webp',
+ '지하철/버스 안':PVB+'hf_20260702_105041_6aa59162-7545-46e9-b9ec-63e3fc2cd5e1_min.webp',
+ '헬스장':PVB+'hf_20260702_105043_93b5c871-ac5d-4686-b023-f54e12867439_min.webp',
+ '도서관/서재':PVB+'hf_20260702_105054_49df27c6-0656-41d1-9458-9ea40b211dc1_min.webp',
+ '벚꽃 배경(봄)':PVB+'hf_20260702_105056_2edf5d61-689b-4e97-96e9-9aba7ff02049_min.webp',
+ '눈 오는 겨울 거리':PVB+'hf_20260702_105102_91375ee6-70b3-4bfb-b047-30ebae6b7f91_min.webp',
+ '럭셔리 백화점 매장':PVB+'hf_20260702_105104_c1446741-bb49-47e2-9ce9-652d5c3d120d_min.webp'
+}};
+var AUDB="https://d1xarpci4ikg0w.cloudfront.net/audio_voice_preset/preview/";
+var AUDIO={voice_off:{
+ '20대 인플루언서 여성':AUDB+'9b7f84c7-8b42-4a32-a0f1-ba223bfd5fae.mp3',
+ '30대 쾌남 남성':AUDB+'65169043-8bf9-403e-84e4-0eb6262026fd.mp3',
+ '신뢰감 중년 남성':AUDB+'ed37f856-236b-413e-9f4d-9c746648ea72.mp3',
+ '차분한 여성 내레이션':AUDB+'1f362462-0a34-41c6-ad26-27525eb5a3cd.mp3',
+ '발랄한 10대 여성':AUDB+'13633b42-3603-4422-b64d-e56ef39104b9.mp3',
+ '성숙한 30대 여성':AUDB+'1f743d5b-f5f5-4add-a124-1de7c176a531.mp3',
+ '굵은 저음 남성':AUDB+'205ba406-f52c-4b61-b3f8-fd04cf683af5.mp3',
+ '다정한 엄마 톤 여성':AUDB+'dc8d2759-bb32-4b0e-904d-b8873efc958e.mp3',
+ '시크한 도시 여성':AUDB+'b504d232-3e67-489d-9b22-0b927caa5926.mp3',
+ '활기찬 쇼호스트 남성':AUDB+'69539faf-af37-4a88-a9a8-f1e77c2096a6.mp3',
+ '감성 속삭임 여성(ASMR)':AUDB+'86e9dea6-6196-41a2-8856-e7c21df4e8cd.mp3',
+ '프로 아나운서 여성':AUDB+'6d9fab46-e2ce-481e-8433-9bfdac49dca0.mp3',
+ '유쾌한 개그 톤 남성':AUDB+'6d53a63c-d1a3-44e2-a6a7-62777b97aa34.mp3',
+ '따뜻한 시니어 여성':AUDB+'bd3e2bd8-cdf0-4425-9c05-7577e2195f86.mp3',
+ '젊은 브이로거 남성':AUDB+'0641e334-cdc1-427c-9957-6d0677fb79fd.mp3',
+ '카리스마 강연자 남성':AUDB+'725aa234-8c64-4a87-8f5e-220aca1375f7.mp3',
+ '청량한 20대 남성':AUDB+'bc7a7070-2785-4f2d-8b5a-78367abc1dee.mp3',
+ '우아한 40대 여성':AUDB+'5c1ab4a7-405e-4237-a126-3b94d8ba7d8c.mp3',
+ '귀여운 하이톤 여성':AUDB+'19581df2-5796-49ed-9cdd-b7ef5afe5626.mp3',
+ '다큐 내레이터 남성':AUDB+'080fcbab-8be3-4d60-8156-3c3040421e0f.mp3'
+}};
+var AUDp=new Audio();
+function playAudio(u){try{AUDp.pause();AUDp.currentTime=0;AUDp.src=u;AUDp.play().catch(function(){});}catch(e){}}
+var tSel=ls_load('site_tsel',{}),tCustom=ls_load('site_tcustom',{});
+var tModel=ls_load('site_tmodel','seedance2');
+function tOpts(k){return TDEF[k].opts.concat(tCustom[k]||[]);}
+function tDesc(k,l){var o=tOpts(k).find(function(o){return o.label===l;});return o?o.desc:l;}
+function tRender(){
+  var root=document.getElementById('t_cats');root.innerHTML='';
+  Object.keys(TDEF).forEach(function(k){
+    var box=document.createElement('div');box.className='cat';
+    var main=document.createElement('div');main.className='catmain';main.innerHTML='<h4>'+TDEF[k].title+'</h4>';
+    var chips=document.createElement('div');chips.className='chips';
+    tOpts(k).forEach(function(o){var c=document.createElement('span');c.className='chip'+(tSel[k]===o.label?' on':'');c.textContent=o.label;
+      c.onclick=function(){tSel[k]=(tSel[k]===o.label?undefined:o.label);ls_save('site_tsel',tSel);if(AUDIO[k]&&tSel[k]===o.label&&AUDIO[k][o.label])playAudio(AUDIO[k][o.label]);tRender();tBuild();};
+      if((tCustom[k]||[]).some(function(x){return x.label===o.label;})){var x=document.createElement('span');x.className='x';x.textContent='✕';
+        x.onclick=function(e){e.stopPropagation();tCustom[k]=tCustom[k].filter(function(v){return v.label!==o.label;});if(tSel[k]===o.label)tSel[k]=undefined;ls_save('site_tcustom',tCustom);ls_save('site_tsel',tSel);tRender();tBuild();};c.appendChild(x);}
+      chips.appendChild(c);});
+    main.appendChild(chips);
+    var add=document.createElement('div');add.className='add';var inp=document.createElement('input');inp.type='text';inp.placeholder='새 옵션 추가·저장';
+    var btn=document.createElement('button');btn.className='addbtn';btn.textContent='+ 추가';
+    btn.onclick=function(){var v=inp.value.trim();if(!v)return;(tCustom[k]=tCustom[k]||[]).push({label:v,desc:v});ls_save('site_tcustom',tCustom);inp.value='';tRender();};
+    inp.addEventListener('keydown',function(e){if(e.key==='Enter')btn.click();});
+    add.appendChild(inp);add.appendChild(btn);main.appendChild(add);
+    box.appendChild(main);
+    var hasImg=PREVIEW[k]&&Object.keys(PREVIEW[k]).length>0;
+    var hasAud=AUDIO[k]&&Object.keys(AUDIO[k]).length>0;
+    if(hasImg||hasAud){
+      var pv=document.createElement('div');pv.className='catpv';
+      if(hasImg){
+        var url=(tSel[k]&&PREVIEW[k][tSel[k]])?PREVIEW[k][tSel[k]]:'';
+        if(url){var im=document.createElement('img');im.src=url;im.alt=tSel[k];pv.appendChild(im);var cap=document.createElement('div');cap.className='cap';cap.textContent=tSel[k];pv.appendChild(cap);}
+        else{pv.innerHTML='<div class="pvempty">옵션 선택 시<br>예시 이미지</div>';}
+      } else {
+        var au=(tSel[k]&&AUDIO[k][tSel[k]])?AUDIO[k][tSel[k]]:'';
+        if(au){var b=document.createElement('button');b.className='audbtn';b.textContent='▶ 미리듣기';
+          b.onclick=(function(u){return function(){playAudio(u);};})(au);pv.appendChild(b);
+          var cap2=document.createElement('div');cap2.className='cap';cap2.textContent=tSel[k];pv.appendChild(cap2);}
+        else{pv.innerHTML='<div class="pvempty">옵션 선택 시<br>미리듣기</div>';}
+      }
+      box.appendChild(pv);
+    }
+    root.appendChild(box);
+  });
+}
+var VMODELS=[
+ {id:'seedance2',name:'Seedance 2.0',fam:'seedance',
+  tag:'레퍼런스 기반 · 제품/인물 일관성 · 멀티샷 · ★인스타 릴스 광고 최적',
+  best:'제품광고·인물 일관성·다중 SKU·15초 멀티샷. 제품 정확도가 생명일 때 1순위(가성비는 Seedance 2.0 Mini).',
+  spec:'4~15초 · 최대 4K · 오디오 생성 · 이미지/영상/오디오 레퍼런스 · 시작·끝 프레임',
+  formula:'맨 위에 [총 길이 / 샷 수 / 비율] 먼저 못박기 → 품질 토큰 → Shot 1, Shot 2… 각 샷을 개별 서술',
+  tips:['첫 줄에 "Total: 15s / N shots / 16:9"처럼 샷 구조를 먼저 고정','샷을 번호로 나눠 동작을 하나씩(평온→위기→절정→여운)','품질 토큰: cinematic lighting, photorealistic, 35mm film, ARRI ALEXA','실사인데 플라스틱처럼 나오면 "no 3D, no cartoon, no VFX" 추가','VFX는 [VFX: ...] 대괄호로 인라인, 효과음은 SFX: 목록으로']},
+ {id:'cinema3',name:'Cinema Studio 3.0',fam:'cinema',
+  tag:'시네마급 최고 품질 · 장르 제어',
+  best:'히어로컷·무드컷·시네마틱 광고. 장르(액션·호러·드라마 등) 지정으로 톤을 잡을 때.',
+  spec:'4~15초 · 최대 4K · 장르 옵션 · 오디오 · 시작·끝 프레임',
+  formula:'MCSLA = Model · Camera · Subject · Look · Action',
+  tips:['카메라는 이름있는 프리셋/무빙으로 구체적으로','능동 동사(sprints, slides, weaving)로 동작 서술','색감(color grade)을 명시적으로 지정','장르 힌트로 전체 톤 고정','막연한 형용사 대신 구체적 스타일']},
+ {id:'veo31',name:'Veo 3.1',fam:'veo',
+  tag:'초사실 · 네이티브 오디오/대사 최강',
+  best:'대사·립싱크·정교한 오디오가 필요한 컷, 초사실 시네마. (가성비: Veo 3.1 Lite)',
+  spec:'4/6/8초 · 720p~1080p · 16:9·9:16 · 동기 오디오/대사 · 시작 이미지(i2v)',
+  formula:'[Cinematography] + [Subject] + [Action] + [Context] + [Style & Ambiance]',
+  tips:['카메라·샷 구성을 맨 앞에 배치','대사는 "따옴표"로, 효과음은 SFX:, 배경음은 Ambient: 로 분리','부정 지시는 "없음"보다 "~가 없는 텅 빈 풍경"처럼 긍정 서술','타임스탬프 [00:00-00:02] … 로 컷별 연출 가능','짧게(50~75단어)=빠른 컨셉, 길게(125~175)=정밀 통제']},
+ {id:'kling3',name:'Kling 3.0',fam:'kling',
+  tag:'멀티샷(최대 6) · 모션/물리 · 오디오싱크',
+  best:'역동적 모션·물리 정확도·스토리보드형 멀티샷. (가성비: Kling 3.0 Turbo)',
+  spec:'3~15초 · std/pro/4K · 16:9·9:16·1:1 · 오디오 · 시작·끝 프레임',
+  formula:'Scene → Characters → Action → Camera → Audio & Style (+ Negative)',
+  tips:['카메라는 프레이밍·앵글·무빙 3종 리스트로 구체화','네거티브는 짧고 정확하게(모션블러·얼굴왜곡·손가락·모핑)','동작은 시간에 따른 카메라 거동으로 서술(tracking, push-in)','멀티샷은 마스터 프롬프트 + 샷별 프롬프트','발 미끄러짐·팔 늘어남 아티팩트는 네거티브로 차단']},
+ {id:'hailuo',name:'Minimax Hailuo 2.3',fam:'hailuo',
+  tag:'자연 물리 · 표정 연기 · 부드러운 모션',
+  best:'인물 감정·자연스러운 물리 움직임. 과하지 않은 카메라 무빙일 때 최고.',
+  spec:'6/10초 · 최대 1080p · 시작·끝 프레임',
+  formula:'[카메라+모션] + [피사체+묘사] + [동작] + [장소+묘사] + [조명] + [스타일/무드]',
+  tips:['카메라 지시는 2~3개 이내로 절제','동작은 물리적으로 구체적인 동사(melt, ignite, morph)','"무엇을"뿐 아니라 "어떻게 느껴지는지"까지 서술','레퍼런스와 목표의 조명을 맞추기','짧고 물리적인 프롬프트가 더 시네마틱']},
+ {id:'marketing',name:'Marketing Studio',fam:'marketing',
+  tag:'원클릭 제품광고 · UGC/릴스/틱톡 · ★인스타 릴스 광고 최적',
+  best:'비개발자용 제품 광고 자동화. 프리셋(UGC·튜토리얼·언박싱·리뷰)+훅+세팅+제품이미지로 조립.',
+  spec:'12~15초 · 최대 1080p · 오디오 · 아바타/제품 이미지 · 훅/세팅/레퍼런스',
+  formula:'프리셋 선택 → Hook(무엇) + Setting(어디) + Talent + Product + Message',
+  tips:['프롬프트보다 프리셋·훅·세팅·제품이미지 선택이 핵심','Hook=주의를 끄는 장치, Setting=장소/분위기','제품 사진을 반드시 업로드(정확도)','레퍼런스 영상 스타일을 복제하려면 ad_reference 사용','UGC는 "광고 티 안 나는 솔직 후기" 톤이 전환율↑']},
+ {id:'wan27',name:'Wan 2.7',fam:'wan',
+  tag:'캐릭터 일관 · 오디오 동기화',
+  best:'같은 캐릭터를 여러 컷에서 유지하며 오디오 싱크가 필요할 때. 스타일라이즈드도 가능.',
+  spec:'2~15초 · 720p~1080p · 오디오 레퍼런스 · 시작·끝 프레임',
+  formula:'Subject + Action + Context + Camera + Style (+ 캐릭터 일관·오디오 싱크 명시)',
+  tips:['캐릭터 외형을 매 컷 동일하게 반복 서술','오디오 싱크가 필요하면 명시','스타일라이즈드/실험적 연출에 강함','과한 카메라 무빙보다 안정적 구도','레퍼런스로 캐릭터 고정']},
+ {id:'grok15',name:'Grok Video 1.5',fam:'grok',
+  tag:'이미지→영상 · 네이티브 오디오 · 물리감',
+  best:'시작 이미지 1장을 시네마틱하게 애니메이트 + 사운드. 정지 컷을 살아있게 만들 때.',
+  spec:'2~15초 · 480p~720p · 시작 이미지(i2v) 필수 · 네이티브 오디오',
+  formula:'Animate start image: Subject + Action + Camera + Style + Native audio',
+  tips:['시작 이미지 1장이 필수(순수 텍스트 불가)','카메라 무빙과 물리 거동을 명시','네이티브 오디오 지시를 함께 작성','한 컷에 과욕 금지, 하나의 명확한 동작','조명/무드를 시작 이미지와 일치']}
+];
+var VREF={
+ seedance2:{vid:'ASuzktD7H_I',ch:'조코딩 JoCoding · 32초',kr:1},
+ cinema3:{vid:'9gadNveHIfc',ch:'퀀텀비 · 17초',kr:1},
+ veo31:{vid:'R08iYvgyayo',ch:'유튜브신쌤 · 41초',kr:1},
+ kling3:{vid:'uM16P1T5p54',ch:'디지털 AI 프롬프트 전문가 · 10초',kr:1},
+ hailuo:{vid:'H4HxiKXjsUc',ch:'퓨리온 AI · 35초',kr:1},
+ marketing:{vid:'enibMJttZdA',ch:'KyuQ캡틴규큐 · 40초',kr:1},
+ wan27:{vid:'xeFBRm6zOfI',ch:'Dzine · 26초',kr:0},
+ grok15:{vid:'cj3qeiqpRfE',ch:'IN사이다 · 16초',kr:1}
+};
+var VORDER=['seedance2','marketing','cinema3','veo31','kling3','hailuo','wan27','grok15'];
+var VEX={
+ seedance2:[
+  {t:'수분크림 UGC 후기 · 9:16 · 15초',p:'Total: 15s / 3 shots / 9:16\nAuthentic UGC beauty review, filmed handheld on a phone, natural not over-polished, photorealistic, soft window daylight, shallow depth of field. Keep the uploaded moisturizer jar identical (same label, shape, color) in every shot — reference-locked.\nShot 1 (0-2s HOOK): selfie POV, a Korean woman in her mid-20s holds the jar close to camera with a surprised delighted look, bright clean bathroom.\nShot 2 (2-11s): macro close-up scooping the rich cream, dewy texture stretching on the fingertip, then applying to her cheek, skin turning hydrated and glowing.\nShot 3 (11-15s): product hero shot on a marble counter with fresh water droplets, brand logo end card.\nSFX: crisp ASMR cream and tapping sounds. no 3D, no cartoon, no VFX.'},
+  {t:'제형 하이퍼모션 훅 · 9:16 · 8초',p:'Total: 8s / 1 shot / 9:16\nHyper-motion product texture showcase, extreme macro, photorealistic, glossy studio light, high-frame-rate slow motion. Keep the uploaded serum bottle identical.\nA single glossy serum drop falls and splashes in slow motion beside the bottle, golden liquid ribbons swirling, water droplets frozen mid-air, ultra crisp. Camera slow push-in.\nSFX: satisfying liquid drop and splash. no 3D, no cartoon.'},
+  {t:'비포&애프터 · 9:16 · 12초',p:'Total: 12s / 2 shots / 9:16\nBefore-and-after skincare comparison, photorealistic, honest natural lighting. Keep the uploaded product identical.\nShot 1 (0-6s): a Korean woman with dull tired skin looks in the mirror, then applies the product.\nShot 2 (6-12s): the same woman with fresh dewy glowing skin, confident smile, split-screen BEFORE / AFTER feel, product held beside her face. Logo end card.\nSFX: gentle uplifting whoosh. no 3D, no cartoon, no VFX.'},
+  {t:'언박싱 · 9:16 · 10초',p:'Total: 10s / 2 shots / 9:16\nCozy unboxing, warm aesthetic, photorealistic, soft desk-lamp light, shallow depth of field. Keep the uploaded product identical.\nShot 1 (0-4s): hands opening a premium product box with tissue paper, excited reveal, the product lifted out.\nShot 2 (4-10s): close-up rotating the product to show the label and texture, placed on a styled desk. Logo end card.\nSFX: paper rustle, satisfying box open. no 3D, no cartoon.'},
+  {t:'카페 감성 데일리 · 9:16 · 15초',p:'Total: 15s / 3 shots / 9:16\nTrendy lifestyle product ad, warm cinematic tones, photorealistic, golden-hour cafe light, 35mm film look. Keep the uploaded product identical.\nShot 1 (0-3s): a stylish Korean woman sets the product on a cafe table, casual chic outfit.\nShot 2 (3-10s): she holds and uses the product naturally while sipping coffee, relaxed daily vibe, soft bokeh background.\nShot 3 (10-15s): product hero shot with a latte and sunlight flare, logo end card.\nSFX: ambient cafe, soft indie music feel. no 3D, no cartoon.'}
+ ],
+ marketing:[
+  {t:'UGC 리얼 후기 · 9:16 · 15초',p:'[Marketing Studio · Instagram Reels]\nPreset(포맷): UGC 리얼 후기\nProduct: (제품 사진 업로드 — product_ids 필수)\nAvatar/Talent: 20대 한국인 여성 인플루언서\nHook(0-2s): “이거 진짜 광고 아니고요…” 제품을 화면 가까이 들이밀며 시작\nSetting(어디): 햇살 드는 깔끔한 원룸 화장대\nMessage: 끈적임 없이 촉촉, 3초 만에 흡수 — 솔직 후기 톤\n9:16 · 12~15초 · 오디오 on · 광고 티 안 나게'},
+  {t:'튜토리얼(사용법) · 9:16 · 15초',p:'[Marketing Studio · Instagram Reels]\nPreset(포맷): Tutorial 사용법\nProduct: (제품 사진 업로드)\nAvatar/Talent: 친근한 20대 여성\nHook(0-2s): “3단계면 끝나요” 자막 + 제품 클로즈업\nSetting(어디): 밝은 욕실 세면대\nMessage: 1) 세안 후 2) 펌프 2번 3) 얼굴 전체 — 단계별 시연\n9:16 · 15초 · 오디오 on'},
+  {t:'언박싱 · 9:16 · 12초',p:'[Marketing Studio · Instagram Reels]\nPreset(포맷): Unboxing\nProduct: (제품 사진 업로드)\nHook(0-2s): 택배 상자가 화면으로 툭 떨어짐 (Object flies into frame)\nSetting(어디): 감성 데스크, 따뜻한 조명\nMessage: 패키지 개봉 → 구성품 소개 → 첫인상 리액션\n9:16 · 12초 · 오디오 on'},
+  {t:'제품 리뷰 · 9:16 · 15초',p:'[Marketing Studio · Instagram Reels]\nPreset(포맷): Product Review\nProduct: (제품 사진 업로드)\nAvatar/Talent: 신뢰감 있는 30대\nHook(0-2s): “한 달 써보고 솔직하게 말합니다”\nSetting(어디): 아늑한 거실\nMessage: 장점 3가지 + 이런 분께 추천 + CTA “프로필 링크 확인”\n9:16 · 15초 · 오디오 on'},
+  {t:'버추얼 트라이온 · 9:16 · 12초',p:'[Marketing Studio · Instagram Reels]\nPreset(포맷): UGC Virtual Try-On\nProduct: (착용 제품 사진 업로드)\nAvatar/Talent: 아바타 1명 선택\nHook(0-2s): 제품이 몸에 “착” 입혀지는 전환\nSetting(어디): 미니멀 스튜디오\nMessage: 다양한 각도 착용 → 사이즈·핏 강조\n9:16 · 12초 · 오디오 on'}
+ ]
+};
+function tModelById(id){return VMODELS.find(function(x){return x.id===id;});}
+function tModel_get(){return VMODELS.find(function(x){return x.id===tModel;})||VMODELS[0];}
+function tSpecDur(s){if(!s)return '15s';var m=s.match(/(\d+)\s*초/);return m?m[1]+'s':'15s';}
+function tSpecRatio(s){if(!s)return '9:16';var m=s.match(/(\d+:\d+)/);return m?m[1]:'9:16';}
+function tAssemble(fam,d,intent){
+  var subj=d.person||'the subject',ctx=d.bg||'',cam=d.camera||'',lit=d.light||'',sty=d.style||'',spec=d.spec||'';
+  var A=intent||'(무엇을 하는 장면인지 ②에 적으면 여기 Action에 들어갑니다)';
+  function j(a){return a.filter(Boolean).join(', ');}
+  switch(fam){
+   case 'veo':
+     return (cam||'Medium shot')+', '+subj+', '+A+(ctx?', in '+ctx:'')+'. '+(j([sty,lit])||'cinematic, natural light')+'.\nDialogue: (대사는 "따옴표"로)\nSFX: (효과음)\nAmbient: (배경음)';
+   case 'seedance':
+     var sd=tSpecDur(spec),sr=tSpecRatio(spec);
+     return 'Total: '+sd+' / 3 shots / '+sr+'  (Instagram Reels 광고)\n'+
+       'Cinematic '+(sty||'authentic UGC')+' product commercial, photorealistic, 35mm film look, ARRI ALEXA aesthetic, shallow depth of field, crisp product focus'+(lit?', '+lit:'')+'. Keep the uploaded product identical (same label, shape, color) in every shot — reference-locked.\n'+
+       'Shot 1 (0-2s HOOK): '+(cam||'fast macro push-in')+' on '+subj+' — '+A+', in '+(ctx||'a bright clean setting')+'. Scroll-stopping first frame.\n'+
+       'Shot 2 (mid, BENEFIT): close-up proving the product works — texture / usage / visible result.\n'+
+       'Shot 3 (last 2s, CTA): product hero shot with brand logo end card.\n'+
+       'SFX: crisp ASMR product sounds. no 3D, no cartoon, no VFX.';
+   case 'kling':
+     return 'Scene: '+(ctx||'(장소)')+'.\nCharacters: '+subj+'.\nAction: '+A+'.\nCamera: '+(cam||'medium, eye level, slow push-in')+'.\nAudio & Style: '+(j([sty,lit])||'(무드/색감)')+'.\nNegative: motion blur, face distortion, warping, morphing, extra limbs, background shifting';
+   case 'cinema':
+     return 'Model: Cinema Studio 3.0.\nCamera: '+(cam||'(카메라 프리셋/무빙)')+'.\nSubject: '+subj+'.\nLook: '+(j([lit,sty])||'(색감/스타일)')+'.\nAction: '+A+'.'+(ctx?'\nSetting: '+ctx+'.':'');
+   case 'hailuo':
+     return '['+(cam||'medium shot, slow dolly-in')+'] + ['+subj+'] + ['+A+'] + ['+(ctx||'(장소)')+'] + ['+(lit||'(조명)')+'] + ['+(sty||'(무드)')+']\n(카메라 지시는 2~3개 이내, 동작은 melt·ignite·morph처럼 물리적 구체 동사로)';
+   case 'marketing':
+     return '[Marketing Studio · Instagram Reels 광고]\n'+
+       'Preset(포맷): '+(sty||'UGC 리얼 후기')+'\n'+
+       'Product: (제품 사진 업로드 필수 — product_ids)\n'+
+       'Avatar/Talent: '+subj+'\n'+
+       'Hook(0-2s, 무엇): (주의를 끄는 장치 — 예: 제품이 화면으로 날아듦 / “이거 광고 아니고요…”)\n'+
+       'Setting(어디): '+(ctx||'햇살 드는 깔끔한 공간')+'\n'+
+       'Message/Script: '+A+'\n'+
+       '9:16 · 12~15초 · 오디오 on · 광고 티 안 나는 솔직 후기 톤이 전환율↑\n'+
+       '팁: 프롬프트보다 preset·hook·setting·제품이미지 선택이 결과를 좌우';
+   case 'wan':
+     return subj+', '+A+(ctx?', in '+ctx:'')+'. Camera: '+(cam||'(무빙)')+'. Style: '+(j([sty,lit])||'(무드)')+'. Character-consistent, synchronized audio.';
+   case 'grok':
+     return 'Animate the start image (i2v): '+subj+', '+A+'. Camera: '+(cam||'cinematic move')+'. '+(j([sty,lit])||'')+'. Native audio: (사운드 지시).\n(시작 이미지 1장 필수)';
+   default:
+     return subj+', '+A+(ctx?', in '+ctx:'')+'. '+j([cam,lit,sty]);
+  }
+}
+function tModelRender(){
+  var box=document.getElementById('t_modelchips');if(!box)return;box.innerHTML='';
+  VORDER.forEach(function(id){var m=tModelById(id);if(!m)return;var c=document.createElement('span');c.className='chip'+(tModel===m.id?' on':'');c.textContent=m.name;
+    c.onclick=function(){tModel=m.id;ls_save('site_tmodel',tModel);tModelRender();tBuild();};box.appendChild(c);});
+  var m=tModel_get();
+  var r=VREF[m.id];
+  var vid = r ? '<div style="margin-top:12px"><div class="lbl" style="margin-bottom:6px">📺 레퍼런스 영상 <span class="hint">'+(r.kr?'한국 크리에이터':'해외/공식 데모')+' · '+r.ch+'</span></div><div style="width:100%;max-width:520px;aspect-ratio:16/9;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#000"><iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/'+r.vid+'" title="reference" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="hint" style="margin-top:4px">모델 특징을 잘 보여주는 예시 · <a href="https://youtu.be/'+r.vid+'" target="_blank" rel="noopener">YouTube에서 열기 ↗</a></div></div>' : '';
+  var ex=VEX[m.id];var exHtml='';
+  if(ex&&ex.length){exHtml='<div style="margin-top:14px"><div class="lbl" style="margin-bottom:6px">📝 예시 프롬프트 <span class="hint">클릭하면 복사됩니다 · '+ex.length+'종</span></div>';
+    ex.forEach(function(e,i){exHtml+='<div class="exrow" data-ex="'+m.id+'|'+i+'" style="border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px;cursor:pointer;background:var(--card2)"><b style="color:var(--mint);font-size:12.5px">'+esc(e.t)+' 📋</b><pre style="margin:6px 0 0;white-space:pre-wrap;font-size:11px;max-height:none;background:transparent;padding:0;color:#cfd6da">'+esc(e.p)+'</pre></div>';});
+    exHtml+='</div>';}
+  document.getElementById('t_modelinfo').innerHTML='<table style="margin-top:10px">'+
+    '<tr><th style="width:70px">특징</th><td>'+m.tag+'</td></tr>'+
+    '<tr><th>추천</th><td>'+m.best+'</td></tr>'+
+    '<tr><th>스펙</th><td>'+m.spec+'</td></tr>'+
+    '<tr><th>공식</th><td><b>'+m.formula+'</b></td></tr></table>'+vid+exHtml;
+  Array.prototype.forEach.call(document.querySelectorAll('#t_modelinfo .exrow'),function(el){el.onclick=function(){var pp=el.dataset.ex.split('|');var arr=VEX[pp[0]];if(arr&&arr[+pp[1]]){navigator.clipboard.writeText(arr[+pp[1]].p).then(toast);}};});
+}
+function tBuild(){
+  var intent=val('t_intent');var order=['person','bg','camera','light','voice','pace','style','spec'];
+  var d={},kor=[];order.forEach(function(k){if(tSel[k]){d[k]=tDesc(k,tSel[k]);kor.push(TDEF[k].title+': '+tSel[k]);}});
+  var m=tModel_get();var p;
+  if(Object.keys(d).length||intent){
+    p='■ '+m.name+' 맞춤 프롬프트 (영문 뼈대 — 복사해 다듬으세요)\n'+tAssemble(m.fam,d,intent)+
+      (kor.length?'\n\n■ 선택 요약\n- '+kor.join('\n- '):'')+
+      '\n\n■ '+m.name+' 프롬프트 팁\n· '+m.tips.join('\n· ');
+  } else {
+    p='① 위에서 제작 모델을 고르고 ② 요청 한 줄 + 카테고리를 채우면, 그 모델 형식에 맞는 프롬프트가 여기에 만들어집니다.\n\n현재 모델: '+m.name+' — '+m.tag+'\n공식: '+m.formula;
+  }
+  document.getElementById('t_out').textContent=p;ls_save('site_tintent',intent);
+}
+function tClear(){tSel={};ls_save('site_tsel',tSel);tRender();tBuild();}
+document.getElementById('t_intent').value=ls_load('site_tintent','')||'';
+document.getElementById('t_intent').addEventListener('input',tBuild);
+tModelRender();tRender();tBuild();
+
+var BANNED=[['미백','톤 케어'],['주름개선','탄력 케어'],['주름 개선','탄력 케어'],['치료','케어'],['재생','진정 케어'],['효능','사용감'],['안티에이징','에이징 케어'],['노화 방지','에이징 케어'],['항균','산뜻한'],['살균','깨끗한'],['아토피',''],['발모','']];
+['c_prod','c_ben','c_tgt','c_len','c_tone','c_cta'].forEach(function(id){document.getElementById(id).addEventListener('input',cBuild);});
+function cBuild(){
+  var prod=val('c_prod')||'제품',bens=val('c_ben').split(',').map(function(s){return s.trim();}).filter(Boolean),tgt=val('c_tgt'),len=parseInt(val('c_len'),10)||15,tone=val('c_tone'),cta=val('c_cta')||'지금 확인하기';
+  var b0=bens[0]||'이 제품';
+  var hookA=(tgt?tgt+'인데 ':'')+'고민이었다면?';
+  var hookB=prod+' 써본 솔직 후기';
+  var hookC='3초만 보세요 — '+b0;
+  var lines=['0-2s [훅] "'+hookA+'"'];
+  var midStart=3,midEnd=Math.max(midStart,len-3);
+  if(bens.length){var per=Math.max(1,Math.round((midEnd-midStart+1)/bens.length));var t=midStart;
+    bens.forEach(function(b,i){var e=(i===bens.length-1)?midEnd:Math.min(midEnd,t+per-1);lines.push(t+'-'+e+'s "'+b+'"');t=e+1;});}
+  else lines.push(midStart+'-'+midEnd+'s "(핵심 베네핏을 입력하세요)"');
+  lines.push((len-2)+'-'+len+'s [CTA] "'+cta+'"');
+  var vo=[hookA,bens.join('. '),cta+'.'].filter(Boolean).join(' ');
+  var out='■ 자막 대본 ('+len+'초 · '+tone+')\n'+lines.join('\n')+'\n\n■ 훅 A/B/C (첫 1초 테스트용)\nA: '+hookA+'\nB: '+hookB+'\nC: '+hookC+'\n\n■ 보이스오버 스크립트\n'+vo;
+  document.getElementById('c_out').textContent=out;
+  ls_save('site_c',{p:val('c_prod'),b:val('c_ben'),t:val('c_tgt'),l:val('c_len'),to:tone,c:val('c_cta')});
+  var text=val('c_prod')+' '+val('c_ben')+' '+val('c_cta');var hits=[];
+  BANNED.forEach(function(pair){if(pair[0]&&text.indexOf(pair[0])>=0)hits.push(pair);});
+  var wb=document.getElementById('c_warn');
+  if(hits.length){wb.innerHTML='<div class="warn"><b>⚠ 광고 금지·주의 표현 감지</b><br>'+hits.map(function(pair){return '· "'+pair[0]+'"'+(pair[1]?' → 대체: "'+pair[1]+'"':' → 삭제 권장');}).join('<br>')+'<br><span class="hint">화장품/건기식은 기능성 단정 표현이 심사 반려될 수 있습니다.</span></div>';}
+  else wb.innerHTML='';
+}
+(function(){var s=ls_load('site_c',null);if(s){document.getElementById('c_prod').value=s.p||'';document.getElementById('c_ben').value=s.b||'';document.getElementById('c_tgt').value=s.t||'';if(s.l)document.getElementById('c_len').value=s.l;if(s.to)document.getElementById('c_tone').value=s.to;if(s.c)document.getElementById('c_cta').value=s.c;}cBuild();})();
+
+var pVals=ls_load('site_pvals',{});
+document.getElementById('p_total').addEventListener('change',pGen);
+document.getElementById('p_clip').addEventListener('change',pGen);
+function pRoles(n){return n===1?['전체']:(n===2?['훅','CTA']:['훅'].concat(new Array(n-2).fill('베네핏')).concat(['CTA']));}
+function pGen(){
+  var total=parseInt(val('p_total'),10),clip=parseInt(val('p_clip'),10);var n=Math.max(1,Math.ceil(total/clip));
+  var rows=document.getElementById('p_rows');rows.innerHTML='';var roles=pRoles(n);
+  for(var i=0;i<n;i++){var secLen=(i===n-1)?(total-clip*(n-1)||clip):clip;
+    var wrap=document.createElement('div');wrap.className='cat';wrap.style.display='block';wrap.innerHTML='<h4>구간 '+(i+1)+' · '+roles[i]+' · 약 '+secLen+'초</h4>';
+    var g=document.createElement('div');g.className='grid';
+    g.innerHTML='<div class="field"><label>장면</label><input type="text" data-k="scene'+i+'" placeholder="이 구간에 보여줄 것"></div><div class="field"><label>카메라</label><input type="text" data-k="cam'+i+'" placeholder="예: 천천히 다가가기"></div>';
+    wrap.appendChild(g);rows.appendChild(wrap);}
+  Array.prototype.forEach.call(rows.querySelectorAll('input'),function(inp){inp.value=pVals[inp.dataset.k]||'';inp.addEventListener('input',function(){pVals[inp.dataset.k]=inp.value;ls_save('site_pvals',pVals);pBuild();});});
+  pBuild();
+}
+function pBuild(){
+  var total=parseInt(val('p_total'),10),clip=parseInt(val('p_clip'),10),n=Math.max(1,Math.ceil(total/clip));var roles=pRoles(n);
+  var out='■ '+total+'초 체이닝 플랜 ('+n+'개 구간)\n';
+  for(var i=0;i<n;i++){out+='\n[구간 '+(i+1)+' · '+roles[i]+']\n- 장면: '+(pVals['scene'+i]||'(미입력)')+'\n- 카메라: '+(pVals['cam'+i]||'(미입력)');if(i>0)out+='\n- 시작 프레임 = 구간 '+i+'의 마지막 프레임 (이음매 제거)';}
+  out+='\n\n[끊김 없이 잇는 규칙]\n- 전 구간 동일 모델·동일 제품/인물 레퍼런스·동일 비율·색감.\n- 앞 구간 끝프레임 → 다음 구간 start_image로 물리기.\n- 카메라 동선을 구간 경계에서 이어지게. 안 되면 같은 장소·조명의 컷 전환.';
+  document.getElementById('p_out').textContent=out;
+}
+pGen();
+
+var LIB=ls_load('site_lib',[]);
+function esc(s){return (s||'').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+function libRender(){
+  var el=document.getElementById('l_list');
+  if(!LIB.length){el.innerHTML='<span class="hint">아직 저장된 프롬프트가 없습니다.</span>';return;}
+  el.innerHTML='';
+  LIB.slice().reverse().forEach(function(item){var d=document.createElement('div');d.className='cat';d.style.display='block';
+    d.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>'+esc(item.name)+(item.tag?' <span class="pill">'+esc(item.tag)+'</span>':'')+'</b><span><button class="btn ghost" data-c="'+item.id+'">복사</button> <button class="btn ghost" data-d="'+item.id+'">삭제</button></span></div><pre style="max-height:150px;margin-top:8px">'+esc(item.text)+'</pre>';
+    el.appendChild(d);});
+  Array.prototype.forEach.call(el.querySelectorAll('[data-c]'),function(b){b.onclick=function(){var it=LIB.find(function(x){return x.id==b.dataset.c;});navigator.clipboard.writeText(it.text).then(toast);};});
+  Array.prototype.forEach.call(el.querySelectorAll('[data-d]'),function(b){b.onclick=function(){LIB=LIB.filter(function(x){return x.id!=b.dataset.d;});ls_save('site_lib',LIB);libRender();};});
+}
+function libAdd(){var name=val('l_name')||'제목 없음',tag=val('l_tag'),text=document.getElementById('l_text').value.trim();
+  if(!text){alert('프롬프트 내용을 입력하세요.');return;}
+  LIB.push({id:Date.now(),name:name,tag:tag,text:text});ls_save('site_lib',LIB);
+  document.getElementById('l_name').value='';document.getElementById('l_tag').value='';document.getElementById('l_text').value='';libRender();toast();}
+function libAddFrom(name,text){if(!text||text.length<10){alert('저장할 내용이 없습니다.');return;}
+  LIB.push({id:Date.now(),name:name+' '+new Date().toLocaleDateString(),tag:'',text:text});ls_save('site_lib',LIB);libRender();toast();go('lib');}
+libRender();
+</script>
+</body>
+</html>
