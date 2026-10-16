@@ -186,10 +186,10 @@
   <section id="s-analyzer">
     <h2>영상 분석기 <span class="pill">레퍼런스 릴스 → 정밀 재현 분석</span></h2>
     <p class="sub">릴스/유튜브 주소를 넣어 재생하며 분석하고, 아래 <b>분석 실행 프롬프트</b>를 복사해 클로드에 붙여넣으면 클로드가 힉스필드로 장면별 정밀 분석 + 재현 마스터 프롬프트까지 만들어줍니다.</p>
-    <div class="warn"><b>정직한 안내:</b> 이 페이지는 영상을 <b>재생</b>하고 <b>분석 지시서</b>를 생성합니다. 실제 정밀 분석은 클로드가 실행합니다. 힉스필드 분석기는 <b>유튜브 URL 또는 업로드 영상 파일</b>만 받으므로, <b>인스타 릴스는 먼저 mp4로 다운로드해 업로드</b>해야 자동 분석됩니다. → 릴스 다운로드: <a href="https://www.save-free.com/ko/" target="_blank" rel="noopener"><b>save-free.com ↗</b></a></div>
+    <div class="warn"><b>정직한 안내:</b> 이 페이지는 영상을 <b>재생</b>하고 <b>분석 지시서</b>를 생성합니다. 실제 정밀 분석은 클로드가 실행합니다. 힉스필드 분석기는 <b>유튜브 URL 또는 업로드 영상 파일</b>만 받으므로, <b>인스타 릴스는 먼저 mp4로 다운로드해 업로드</b>해야 자동 분석됩니다. → 릴스 다운로드: <a href="https://www.save-free.com/ko/" target="_blank" rel="noopener"><b>save-free.com</b></a></div>
     <div class="card"><label>레퍼런스 영상 주소 <span class="hint">인스타 릴스(/p/, /reel/) 또는 유튜브</span></label>
       <div class="add"><input type="text" id="an_url" placeholder="https://www.instagram.com/reel/... 또는 https://youtu.be/..."><button class="addbtn" onclick="anLoad()">불러오기 ▶</button></div>
-      <div class="hint" style="margin-top:8px">📥 릴스 다운로드: <a href="https://www.save-free.com/ko/" target="_blank" rel="noopener"><b>save-free.com ↗</b></a> 에서 릴스 주소를 붙여넣어 mp4로 저장 → 클로드에 업로드하면 자동 분석됩니다.</div>
+      <div class="hint" style="margin-top:8px">📥 릴스 다운로드: <a href="https://www.save-free.com/ko/" target="_blank" rel="noopener"><b>save-free.com</b></a> 에서 릴스 주소를 붙여넣어 mp4로 저장 → 클로드에 업로드하면 자동 분석됩니다.</div>
       <div id="an_player" style="margin-top:12px"></div>
     </div>
     <div class="card"><h3 style="margin-top:0">정밀 분석 프레임워크 (재생하며 관찰 → 분석 지시서에 반영)</h3>
@@ -810,7 +810,7 @@ function tModelRender(){
     c.onclick=function(){tModel=m.id;ls_save('site_tmodel',tModel);tModelRender();tBuild();};box.appendChild(c);});
   var m=tModel_get();
   var r=VREF[m.id];
-  var vid = r ? '<div style="margin-top:12px"><div class="lbl" style="margin-bottom:6px">📺 레퍼런스 영상 <span class="hint">'+(r.kr?'한국 크리에이터':'해외/공식 데모')+' · '+r.ch+'</span></div><div style="width:100%;max-width:520px;aspect-ratio:16/9;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#000"><iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/'+r.vid+'" title="reference" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="hint" style="margin-top:4px">모델 특징을 잘 보여주는 예시 · <a href="https://youtu.be/'+r.vid+'" target="_blank" rel="noopener">YouTube에서 열기 ↗</a></div></div>' : '';
+  var vid = r ? '<div style="margin-top:12px"><div class="lbl" style="margin-bottom:6px">📺 레퍼런스 영상 <span class="hint">'+(r.kr?'한국 크리에이터':'해외/공식 데모')+' · '+r.ch+'</span></div><div style="width:100%;max-width:520px;aspect-ratio:16/9;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#000"><iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/'+r.vid+'" title="reference" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="hint" style="margin-top:4px">모델 특징을 잘 보여주는 예시 · <a href="https://youtu.be/'+r.vid+'" target="_blank" rel="noopener">YouTube에서 열기</a></div></div>' : '';
   var ex=VEX[m.id];var exHtml='';
   if(ex&&ex.length){exHtml='<div style="margin-top:14px"><div class="lbl" style="margin-bottom:6px">📝 예시 프롬프트 <span class="hint">클릭하면 복사됩니다 · '+ex.length+'종</span></div>';
     ex.forEach(function(e,i){exHtml+='<div class="exrow" data-ex="'+m.id+'|'+i+'" style="border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px;cursor:pointer;background:var(--card2)"><b style="color:var(--mint);font-size:12.5px">'+esc(e.t)+' 📋</b><pre style="margin:6px 0 0;white-space:pre-wrap;font-size:11px;max-height:none;background:transparent;padding:0;color:#cfd6da">'+esc(e.p)+'</pre></div>';});
@@ -979,7 +979,7 @@ function anLoad(){
   var url=val('an_url');var p=anParse(url);var box=document.getElementById('an_player');
   if(!p.type){box.innerHTML='<div class="hint">인스타 릴스(/reel/ 또는 /p/) 또는 유튜브 주소를 넣어주세요.</div>';anBuild(url,p);ls_save('site_anurl',url);return;}
   if(p.type==='ig'){
-    box.innerHTML='<div style="max-width:400px"><iframe src="https://www.instagram.com/p/'+p.code+'/embed/" width="100%" height="640" frameborder="0" scrolling="no" allowtransparency="true" loading="lazy" style="border:1px solid var(--line);border-radius:10px;background:#000"></iframe></div><div class="hint" style="margin-top:4px">재생 안 되면 <a href="'+url+'" target="_blank" rel="noopener">인스타에서 열기 ↗</a> · <a href="https://www.save-free.com/ko/" target="_blank" rel="noopener">save-free.com에서 mp4 다운로드 ↗</a> 후 업로드하면 자동 분석</div>';
+    box.innerHTML='<div style="max-width:400px"><iframe src="https://www.instagram.com/p/'+p.code+'/embed/" width="100%" height="640" frameborder="0" scrolling="no" allowtransparency="true" loading="lazy" style="border:1px solid var(--line);border-radius:10px;background:#000"></iframe></div><div class="hint" style="margin-top:4px">재생 안 되면 <a href="'+url+'" target="_blank" rel="noopener">인스타에서 열기</a> · <a href="https://www.save-free.com/ko/" target="_blank" rel="noopener">save-free.com에서 mp4 다운로드</a> 후 업로드하면 자동 분석</div>';
   } else {
     box.innerHTML='<div style="width:100%;max-width:360px;aspect-ratio:9/16;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#000"><iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/'+p.code+'" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>';
   }
